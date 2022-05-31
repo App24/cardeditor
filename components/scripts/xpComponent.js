@@ -1,4 +1,4 @@
-function togglePosition(element) {
+function toggleXPPosition(element) {
     const xpPosition = document.getElementById("xpPosition");
     if (element.checked) {
         xpPosition.classList.add("hidden");

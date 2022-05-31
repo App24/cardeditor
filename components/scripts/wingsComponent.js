@@ -1,4 +1,4 @@
-function togglePosition(element) {
+function toggleWingsPosition(element) {
     const wingsPosition = document.getElementById("wingsPosition");
     if (element.checked) {
         wingsPosition.classList.add("hidden");
