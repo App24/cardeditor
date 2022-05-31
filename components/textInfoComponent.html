@@ -1,0 +1,130 @@
+<fieldset data-nosave>
+    <legend>Text Info</legend>
+    <div>
+        <label id="%id%_textLabel" for="%parentComp%_text">Text: </label>
+        <input type="text" class="updateCard" name="%parentComp%_text" id="%parentComp%_text" value="%defaultText%">
+    </div>
+    <div>
+        <label for="%parentComp%_textAlign">Text Alignment: </label>
+        <select name="%parentComp%_textAlign" id="%parentComp%_textAlign" class="updateCard">
+            <option id="%id%_left" value="left">Left</option>
+            <option id="%id%_center" value="center">Center</option>
+            <option id="%id%_right" value="right">Right</option>
+        </select>
+    </div>
+    <div>
+        <label for="%parentComp%_textBaseline">Text Baseline: </label>
+        <select name="%parentComp%_textBaseline" id="%parentComp%_textBaseline" class="updateCard">
+            <option id="%id%_top" value="top">Top</option>
+            <option id="%id%_hanging" value="hanging">Hanging</option>
+            <option id="%id%_middle" value="middle">Middle</option>
+            <option id="%id%_alphabetic" value="alphabetic">Alphabetic</option>
+            <option id="%id%_ideographic" value="ideographic">Ideographic</option>
+            <option id="%id%_bottom" value="bottom">Bottom</option>
+        </select>
+    </div>
+    <div>
+        <label for="%parentComp%_textColor">Text Color: </label>
+        <input type="color" class="updateCard" name="%parentComp%_textColor" id="%parentComp%_textColor"
+            value="%defaultTextColor%">
+    </div>
+    <div>
+        <label for="%parentComp%_textSize">Text Size: </label>
+        <input id="%parentComp%_textSize" name="%parentComp%_textSize" type="range" min="0.5" max="1.5" value="1"
+            step="0.1" class="updateCard">
+    </div>
+    <div>
+        <label for="%parentComp%_strokeColor">Stroke Color: </label>
+        <input type="color" class="updateCard" name="%parentComp%_strokeColor" id="%parentComp%_strokeColor"
+            value="%defaultStrokeColor%">
+    </div>
+    <div>
+        <label for="%parentComp%_strokeSize">Stroke Size: </label>
+        <input id="%parentComp%_strokeSize" name="%parentComp%_strokeSize" type="range" min="0" max="5"
+            value="%defaultStroke%" class="updateCard">
+    </div>
+    <script>
+        function comp_%id%_init(component){
+            if (component.dataset.notextsize != null) {
+                document.getElementById("%parentComp%_textSize").parentElement.remove();
+            }
+
+            if(component.dataset.textnosave!=null){
+                document.getElementById("%parentComp%_text").dataset.nosave="";
+                document.getElementById("%id%_textLabel").innerText=document.getElementById("%id%_textLabel").innerText.replace(":", "*:");
+            }
+
+            if (component.dataset.defaultalign != null) {
+                switch (component.dataset.defaultalign.toLowerCase()) {
+                    default:
+                    case "left":
+                        {
+                            const select = document.getElementById("%id%_left");
+                            select.selected = true;
+                        }
+                        break;
+                    case "center":
+                        {
+                            const select = document.getElementById("%id%_center");
+                            select.selected = true;
+                        }
+                        break;
+                    case "right":
+                        {
+                            const select = document.getElementById("%id%_right");
+                            select.selected = true;
+                        }
+                        break;
+                }
+            } else {
+                const select = document.getElementById("%id%_left");
+                select.selected = true;
+            }
+
+            if (component.dataset.defaultbaseline != null) {
+                switch (component.dataset.defaultbaseline.toLowerCase()) {
+                    case "top":
+                        {
+                            const select = document.getElementById("%id%_top");
+                            select.selected = true;
+                        }
+                        break;
+                    case "hanging":
+                        {
+                            const select = document.getElementById("%id%_hanging");
+                            select.selected = true;
+                        }
+                        break;
+                    case "middle":
+                        {
+                            const select = document.getElementById("%id%_middle");
+                            select.selected = true;
+                        }
+                        break;
+                    default:
+                    case "alphabetic":
+                        {
+                            const select = document.getElementById("%id%_alphabetic");
+                            select.selected = true;
+                        }
+                        break;
+                    case "ideographic":
+                        {
+                            const select = document.getElementById("%id%_ideographic");
+                            select.selected = true;
+                        }
+                        break;
+                    case "bottom":
+                        {
+                            const select = document.getElementById("%id%_bottom");
+                            select.selected = true;
+                        }
+                        break;
+                }
+            } else {
+                const select = document.getElementById("%id%_alphabetic");
+                select.selected = true;
+            }
+        }
+    </script>
+</fieldset>

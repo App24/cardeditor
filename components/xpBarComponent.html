@@ -1,0 +1,23 @@
+<div class="menu" data-updatefunc="drawXpBar">
+    <div class="label draggable">
+        XP Bar
+    </div>
+    <div class="content hidden">
+        <div>
+            <label for="xpBar_startColor">Start Color: </label>
+            <input type="color" name="xpBar_startColor" id="xpBar_startColor" value="#cc0000" class="updateCard">
+
+            <label for="xpBar_endColor">End Color: </label>
+            <input type="color" name="xpBar_endColor" id="xpBar_endColor" value="#44cc00" class="updateCard">
+        </div>
+        <div>
+            <label for="xpBar_width">Bar Size: </label>
+            <input type="range" name="xpBar_width" id="xpBar_width" min="3" max="15" value="10" class="updateCard">
+        </div>
+        <div>
+            <label for="xpBar_filled">Bar Filled*: </label>
+            <input type="range" data-nosave name="xpBar_filled" id="xpBar_filled" min="0" max="1" value="0" step="0.01"
+                class="updateCard">
+        </div>
+    </div>
+</div>
