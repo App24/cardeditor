@@ -718,8 +718,8 @@ function loadCode(code) {
             const element = document.getElementById(partName);
             if (element) {
                 switch (element.getAttribute("type")) {
-                    case "element":
-                        element.checked = partValue;
+                    case "checkbox":
+                        element.checked = partValue.toLowerCase() === "true";
                         break;
                     default:
                         element.value = partValue;
@@ -749,6 +749,6 @@ function showCode() {
 
 function readCode() {
     loadCode(document.getElementById("cardCode").value);
-    
+
     saveCard();
 }
