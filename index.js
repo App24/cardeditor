@@ -211,6 +211,9 @@ window.onload = async () => {
         for (const updateCard of updateCards) {
             updateCard.addEventListener("change", () => updateLayerElement(updateCard));
             updateCard.addEventListener("input", () => updateLayerElement(updateCard));
+            if (updateCard.getAttribute("type") === "button") {
+                updateCard.addEventListener("click", () => updateLayerElement(updateCard));
+            }
         }
     }
 
@@ -745,7 +748,7 @@ function showCode() {
 }
 
 function readCode() {
-    saveCard();
-    
     loadCode(document.getElementById("cardCode").value);
+    
+    saveCard();
 }

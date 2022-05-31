@@ -6,7 +6,7 @@
         <label for="%parentComp%_positionY">Y Position: </label>
         <input type="number" class="updateCard" name="%parentComp%_positionY" id="%parentComp%_positionY" value="%defaultY%">
     </div>
-    <input id="reset_%id%" type="button" value="Reset to default">
+    <input id="reset_%id%" type="button" value="Reset to default" class="updateCard" data-nosave>
     <script>
         function comp_%id%_init () {
             const resetButton = document.getElementById("reset_%id%");
