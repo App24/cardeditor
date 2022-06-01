@@ -33,7 +33,7 @@ function isMenuEmpty(menuElement) {
     }
 };
 
-function collapseMenu(menuElement) {
+function collapseMenu(menuElement, recursive = false) {
     if (!menuElement.classList.contains("menu") && (menuElement.classList.contains("content") || menuElement.classList.contains("label"))) {
         menuElement = menuElement.parentElement;
     } else if (!menuElement.classList.contains("menu")) {
@@ -47,6 +47,15 @@ function collapseMenu(menuElement) {
     dropdownSvg.setAttribute("href", isMenuEmpty(menuElement) ? "#closedGreyout" : "#closed");
 
     content.classList.add("hidden");
+
+    if (recursive) {
+        const children = content.children;
+        for(const child of children){
+            if(child.children.length > 0){
+                collapseMenu(child.children[0]);
+            }
+        }
+    }
 }
 
 function openMenu(menuElement) {

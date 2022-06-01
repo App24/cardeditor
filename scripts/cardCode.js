@@ -80,7 +80,7 @@ function loadCode(code) {
     {
         const layers = getLayerMenus();
         layers.forEach(layer => {
-            collapseMenu(layer);
+            collapseMenu(layer, true);
         });
     }
 
@@ -101,6 +101,7 @@ function showCode() {
 
     const code = generateCode();
     document.getElementById("cardCode").value = code;
+    document.getElementById("cardCode").select();
 }
 
 function readCode() {
