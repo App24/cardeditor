@@ -24,7 +24,7 @@ function mergeWings(element) {
 }
 
 async function drawWings(canvas, data) {
-    const { wings_template, wings_type, wings_image, wingsACharacter, wingsAExample, wingsBCharacter, wingsBExample, followPfp, wings_positionX, wings_positionY } = data;
+    const { wings_template, wings_type, wings_image, wingsAExample, wingsBExample, followPfp, wings_positionX, wings_positionY } = data;
 
     const ctx = canvas.getContext("2d");
 
@@ -46,8 +46,6 @@ async function drawWings(canvas, data) {
             wingsImages.push(undefined);
         }
     }
-
-    // const pfpRadius = (130 * getValue("pfpSize"));
 
     const pfpX = followPfp ? getValue("pfp_positionX") : wings_positionX;
     const pfpY = followPfp ? getValue("pfp_positionY") : wings_positionY;

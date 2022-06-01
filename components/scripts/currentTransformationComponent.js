@@ -1,9 +1,6 @@
 function drawCurrentTransformation(canvas, data) {
-    const { currentTransformation_textAlign, currentTransformation_textBaseline, currentTransformation_text, currentTransformation_strokeSize, currentTransformation_positionX, currentTransformation_positionY } = data;
-    let { currentTransformation_textColor, currentTransformation_strokeColor } = data;
-
-    currentTransformation_textColor = currentTransformation_textColor.removeHash();
-    currentTransformation_strokeColor = currentTransformation_strokeColor.removeHash();
+    const { currentTransformation_textAlign, currentTransformation_textBaseline, currentTransformation_text, currentTransformation_strokeSize, currentTransformation_textColor, currentTransformation_strokeColor } = data;
+    const { currentTransformation_positionX, currentTransformation_positionY } = data;
 
     const currentRankText = `Current Transformation: ${currentTransformation_text}`;
 
@@ -13,10 +10,10 @@ function drawCurrentTransformation(canvas, data) {
 
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.textBaseline = currentTransformation_textBaseline;
-    ctx.fillStyle = `#${currentTransformation_textColor}`;
+    ctx.fillStyle = currentTransformation_textColor;
     ctx.textAlign = currentTransformation_textAlign;
     if (currentTransformation_strokeSize > 0) {
-        ctx.strokeStyle = `#${currentTransformation_strokeColor}`;
+        ctx.strokeStyle = currentTransformation_strokeColor;
         ctx.lineWidth = currentTransformation_strokeSize;
         ctx.strokeText(currentRankText, currentTransformation_positionX, currentTransformation_positionY);
     }

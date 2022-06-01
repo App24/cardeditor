@@ -1,9 +1,7 @@
 function drawXpBar(canvas, data) {
-    const { xpBar_filled: filled } = data;
-    let { xpBar_startColor, xpBar_endColor, xpBar_width } = data;
+    const { xpBar_filled: filled, xpBar_startColor, xpBar_endColor } = data;
+    let { xpBar_width } = data;
 
-    xpBar_startColor = xpBar_startColor.removeHash();
-    xpBar_endColor = xpBar_endColor.removeHash();
     xpBar_width = parseInt(xpBar_width);
 
     const ctx = canvas.getContext("2d");

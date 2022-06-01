@@ -1,7 +1,7 @@
 function drawPfpCircle(canvas, data) {
-    let { pfpCircle_color, pfpCircle_width } = data;
+    const { pfpCircle_color } = data;
+    let { pfpCircle_width } = data;
 
-    pfpCircle_color = pfpCircle_color.removeHash();
     pfpCircle_width = parseInt(pfpCircle_width);
 
     const ctx = canvas.getContext("2d");
@@ -13,7 +13,7 @@ function drawPfpCircle(canvas, data) {
     ctx.save();
     ctx.beginPath();
     ctx.arc(pfpRadius + cardPfpX, pfpRadius + cardPfpY, pfpRadius + pfpCircle_width, 0, 360);
-    ctx.strokeStyle = `#${pfpCircle_color}`;
+    ctx.strokeStyle = pfpCircle_color;
     ctx.lineWidth = pfpCircle_width * 2;
     ctx.stroke();
     ctx.restore();

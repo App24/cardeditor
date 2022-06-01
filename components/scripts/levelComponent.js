@@ -1,9 +1,6 @@
 function drawLevelsText(canvas, data) {
-    const { level_text, level_textSize, level_textAlign, level_textBaseline, level_strokeSize, level_positionX, level_positionY } = data;
-    let { level_textColor, level_strokeColor } = data;
-
-    level_textColor = level_textColor.removeHash();
-    level_strokeColor = level_strokeColor.removeHash();
+    const { level_text, level_textSize, level_textAlign, level_textBaseline, level_strokeSize, level_textColor, level_strokeColor } = data;
+    const { level_positionX, level_positionY } = data;
 
     const ctx = canvas.getContext("2d");
 
@@ -12,11 +9,11 @@ function drawLevelsText(canvas, data) {
     const levelsText = `Level: ${level_text}`;
 
     ctx.textBaseline = level_textBaseline;
-    ctx.fillStyle = `#${level_textColor}`;
+    ctx.fillStyle = level_textColor;
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.textAlign = level_textAlign;
     if (level_strokeSize > 0) {
-        ctx.strokeStyle = `#${level_strokeColor}`;
+        ctx.strokeStyle = level_strokeColor;
         ctx.lineWidth = level_strokeSize;
         ctx.strokeText(levelsText, level_positionX, level_positionY);
     }

@@ -9,10 +9,7 @@ function toggleXPPosition(element) {
 
 function drawXpText(canvas, data) {
     const { xp_text, xp_textSize, xp_middleLevel, xp_textAlign, xp_textBaseline, xp_strokeSize, xp_positionX, xp_positionY } = data;
-    let { xp_textColor, xp_strokeColor } = data;
-
-    xp_textColor = xp_textColor.removeHash();
-    xp_strokeColor = xp_strokeColor.removeHash();
+    const { xp_textColor, xp_strokeColor } = data;
 
     const ctx = canvas.getContext("2d");
 
@@ -38,11 +35,11 @@ function drawXpText(canvas, data) {
     const xpFontSize = 33.33333333333333 * xp_textSize;
 
     ctx.font = `${xpFontSize}px ${CANVAS_FONT}`;
-    ctx.fillStyle = `#${xp_textColor}`;
+    ctx.fillStyle = xp_textColor;
     ctx.textBaseline = xp_textBaseline;
     ctx.textAlign = xp_textAlign;
     if (xp_strokeSize > 0) {
-        ctx.strokeStyle = `#${xp_strokeColor}`;
+        ctx.strokeStyle = xp_strokeColor;
         ctx.lineWidth = xp_strokeSize;
         ctx.strokeText(xp_text, x, y);
     }
