@@ -45,16 +45,16 @@ document.onmouseup = (e) => {
         drag.style.left = null;
         drag.style.top = null;
         if (!draggedOver.classList.contains("layer-menu")) {
-            draggings[drag.querySelector(".draggable").id].oldParent.appendChild(drag);
-            draggings[drag.querySelector(".draggable").id].oldParent.classList.remove("hidden");
-            draggings[drag.querySelector(".draggable").id].oldParent.parentElement.querySelector(".label").querySelector("#dropdown").children[0].setAttribute("href", "#opened");
+            const draggable = drag.querySelector(".draggable");
+            const oldParent = draggings[draggable.id].oldParent;
+            oldParent.appendChild(drag);
+            openMenu(oldParent);
         } else {
             const content = draggedOver.querySelector(".content");
             content.appendChild(drag);
-            content.classList.remove("hidden");
-            draggedOver.querySelector(".label").querySelector("#dropdown").children[0].setAttribute("href", "#opened");
 
             const requiredComponents = getRequiredComponents(drag);
+            const dependantComponents = getDependantComponents(drag);
 
             requiredComponents.forEach(requiredComponent => {
                 const component = document.getElementsByClassName(`component-${requiredComponent}`)[0];
@@ -62,81 +62,21 @@ document.onmouseup = (e) => {
                 if (layer < 0)
                     content.appendChild(component);
             });
+
+            if (dependantComponents.length > 0) {
+                const component = document.getElementsByClassName(`component-${dependantComponents[0]}`)[0];
+                const otherContent = getLayerMenu(getLayer(component)).querySelector(".content");
+                otherContent.appendChild(drag);
+                openMenu(otherContent);
+            } else {
+                openMenu(draggedOver);
+            }
         }
         const layer = getLayer(drag);
         if (layer < 0) continue;
 
         updateLayer(layer);
     }
-}
-
-let currentComponentId = 0;
-
-async function loadComponents(i = 0) {
-    const components = document.querySelectorAll("[data-component]");
-    if (!components || !components.length) return;
-    await asyncForEach(components, async (component) => {
-        const file = component.dataset.component;
-        if (!file) return;
-        await new Promise((resolve, error) => {
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = async function () {
-                if (this.readyState === 4) {
-                    if (this.status === 200) {
-                        if (component.dataset.noscript == null) {
-                            const script = document.createElement("script");
-                            script.src = `components/scripts/${file}Component.js`;
-                            document.head.appendChild(script);
-                        }
-                        let text = this.responseText;
-
-                        const replaceText = (key, value) => {
-                            const searchMask = `%${key}%`;
-                            const regExp = new RegExp(searchMask, "ig");
-                            text = text.replace(regExp, value);
-                        };
-
-                        for (const data in component.dataset) {
-                            replaceText(data, component.dataset[data]);
-                        }
-
-                        replaceText("id", currentComponentId);
-
-                        component.innerHTML = text;
-                        component.children.item(0).classList.add(`component-${file}`);
-                        component.children.item(0).dataset.componenttype = component.dataset.component;
-
-                        if (i) {
-                            component.children.item(0).dataset.subcomponent = "true";
-                        }
-
-                        delete component.dataset.component;
-                        {
-                            const scriptText = component.querySelector("script");
-                            if (scriptText) {
-                                const script = document.createElement("script");
-                                script.innerText = scriptText.innerText;
-                                document.head.appendChild(script);
-                                const init_func = window[`comp_${currentComponentId}_init`];
-                                if (init_func && typeof init_func === "function") {
-                                    await init_func(component);
-                                }
-                                scriptText.remove();
-                            }
-                        }
-                        currentComponentId++;
-                        resolve();
-                    }
-                    if (this.status === 404) {
-                        error();
-                    }
-                }
-            };
-            xhttp.open("GET", `components/${file}Component.html`, true);
-            xhttp.send();
-        }).catch(() => undefined);
-    });
-    await loadComponents(++i);
 }
 
 window.onload = async () => {
@@ -252,38 +192,14 @@ window.onload = async () => {
                         const layer = getLayer(draggable);
                         dragging.drag = true;
                         dragging.oldParent = draggable.parentElement.parentElement;
-                        if (draggable.parentElement.classList.contains("menu")) {
-                            draggable.parentElement.querySelector(".content").classList.add("hidden");
-                            draggable.parentElement.querySelector(".label").querySelector("#dropdown").children[0].setAttribute("href", "#closed");
-                        }
+                        const oldMenu = draggable.parentElement;
                         draggable.parentElement.classList.add("dragging");
                         document.getElementById("dragging-heaven").appendChild(draggable.parentElement);
-                        if (dragging.oldParent.classList.contains("content")) {
-                            if (!dragging.oldParent.children.length) {
-                                dragging.oldParent.classList.add("hidden");
-                                dragging.oldParent.parentElement.querySelector(".label").querySelector("#dropdown").children[0].setAttribute("href", "#closed");
-                            } else {
-                                let found = false;
-                                for (const child of dragging.oldParent.children) {
-                                    if (child.tagName !== "COMPONENT") {
-                                        found = true;
-                                        break;
-                                    } else {
-                                        if (child.children.length) {
-                                            found = true;
-                                            break;
-                                        }
-                                    }
-                                }
-                                let expand = true;
-                                if (!found) {
-                                    expand = false;
-                                }
-                                if (!expand) {
-                                    dragging.oldParent.classList.add("hidden");
-                                    dragging.oldParent.parentElement.querySelector(".label").querySelector("#dropdown").children[0].setAttribute("href", "#closed");
-                                }
-                            }
+                        collapseMenu(oldMenu);
+                        if (isMenuEmpty(dragging.oldParent)) {
+                            collapseMenu(dragging.oldParent);
+                        } else {
+                            openMenu(dragging.oldParent);
                         }
                         if (layer >= 0)
                             updateLayer(layer);
@@ -325,12 +241,10 @@ window.onload = async () => {
         const code = localStorage.getItem("cardCode");
         if (code != null) {
             loadCode(code);
-            document.querySelectorAll("[data-layer]").forEach(layer => {
-                const content = layer.querySelector(".content");
-                content.classList.add("hidden");
-                layer.querySelector(".label").querySelector("#dropdown").children[0].setAttribute("href", "#closed");
-            });
         }
+        getLayerMenus().forEach(layer => {
+            collapseMenu(layer);
+        });
     }
 
     changeVisibleLayers();
@@ -391,41 +305,15 @@ function drawMaskedImage(mask, image, globalCompositeOperation) {
     return canvas;
 }
 
-function toggleMenu(element) {
-    const content = element.parentElement.querySelector(".content");
-    const svg = element.parentElement.querySelector(".label").querySelector("#dropdown").children[0];
-    if (content.children.length) {
-        let found = false;
-        for (const child of content.children) {
-            if (child.tagName !== "COMPONENT") {
-                found = true;
-                break;
-            } else {
-                if (child.children.length) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-        let expand = true;
-        if (!found) {
-            expand = false;
-        }
-        if (content.classList.contains("hidden") && expand) {
-            content.classList.remove("hidden");
-            svg.setAttribute("href", "#opened");
-        } else {
-            content.classList.add("hidden");
-            svg.setAttribute("href", "#closed");
-        }
-    }
-}
-
 function checkIfFileExists(url) {
-    var http = new XMLHttpRequest();
-    http.open('HEAD', url, false);
-    http.send();
-    return http.status != 404;
+    try {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        return http.status != 404;
+    } catch {
+        return false;
+    }
 }
 
 async function getImageFromBlob(blob) {
@@ -445,20 +333,6 @@ function createCanvas(width, height) {
     canvas.width = width;
     canvas.height = height;
     return canvas;
-}
-
-function hideSettings() {
-    const settings = document.getElementById("settings");
-    const settings_button = document.getElementById("settings-button");
-    settings.classList.add("hidden");
-    settings_button.classList.remove("hidden");
-}
-
-function showSettings() {
-    const settings = document.getElementById("settings");
-    const settings_button = document.getElementById("settings-button");
-    settings.classList.remove("hidden");
-    settings_button.classList.add("hidden");
 }
 
 function getCanvas(layer) {
@@ -487,7 +361,7 @@ function updateLayerElement(element) {
 
 async function updateLayer(layer) {
     if (layer < 0) return;
-    const container = document.querySelector(`[data-layer="${layer}"]`).querySelector(".content");
+    const container = getLayerMenu(layer).querySelector(".content");
     const updateFuncs = container.querySelectorAll("[data-updatefunc]");
     const canvas = getCanvas(layer);
     canvas.width = canvasWidth;
@@ -562,6 +436,24 @@ function getRequiredComponents(element) {
     return currentElement.dataset.requiredcomponent.split(" ");
 }
 
+function getDependantComponents(element) {
+    const requiredComponents = document.querySelectorAll(`[data-requiredcomponent]`);
+    const toReturn = [];
+
+    if (requiredComponents) {
+        requiredComponents.forEach(comp => {
+            comp.dataset.requiredcomponent.split(" ").forEach(c => {
+                if (c === element.dataset.componenttype) {
+                    if (getLayer(comp) >= 0)
+                        toReturn.push(comp.dataset.componenttype);
+                }
+            });
+        });
+    }
+
+    return toReturn;
+}
+
 async function loadImage(path) {
     if (!checkIfFileExists(path)) return;
 
@@ -577,19 +469,13 @@ async function asyncForEach(array, callbackFn) {
     return false;
 }
 
-function getValue(elementId) {
-    return document.getElementById(elementId).value;
-}
-
 function fitTextOnCanvas(ctx, text, width, startSize = 100) {
-    // start with a large font size
     let fontsize = startSize;
 
     const prevFont = ctx.font;
 
     ctx.font = `${fontsize}px ${CANVAS_FONT}`;
 
-    // lower the font size until the text fits the canvas
     do {
         fontsize--;
         ctx.font = `${fontsize}px ${CANVAS_FONT}`;
@@ -653,102 +539,4 @@ function rgbToHsl(r, g, b) {
         s,
         l
     };
-}
-
-function generateCode() {
-    const readValues = document.querySelectorAll(".updateCard");
-    const saveValues = [];
-    for (let i = 0; i < readValues.length; i++) {
-        if (readValues[i].dataset.nosave == null && getLayer(readValues[i]) >= 0)
-            saveValues.push(readValues[i]);
-    }
-
-    const code = [];
-
-    saveValues.forEach(saveValue => {
-        let value;
-        switch (saveValue.getAttribute("type")) {
-            case "checkbox":
-                value = saveValue.checked;
-                break;
-            default:
-                value = saveValue.value;
-                break;
-        }
-        code.push(`${saveValue.id}=${value}`);
-    });
-
-    {
-        const components = document.querySelectorAll("[data-componenttype]");
-        components.forEach(component => {
-            const layer = getLayer(component);
-            if (layer >= 0 && component.dataset.nosave == null) {
-                code.push(`cl_${component.dataset.componenttype}=${layer}`);
-            }
-        });
-    }
-
-    return code.join("|");
-}
-
-function loadCode(code) {
-    const codeParts = code.split("|");
-
-    if (codeParts.length <= 1)
-        return;
-
-    document.querySelectorAll("[data-componenttype]").forEach(component => {
-        if (component.dataset.subcomponent == null) {
-            const layer = document.querySelector(`[data-layer="-1"]`);
-            layer.querySelector(".content").appendChild(component);
-        }
-    });
-
-    codeParts.forEach(codePart => {
-        const parts = codePart.split("=");
-        const partName = parts.shift();
-        const partValue = parts.join("=");
-        if (partName.startsWith("cl_")) {
-            const component = document.querySelector(`[data-componenttype="${partName.substring(3, partName.length)}"`);
-            const layer = document.querySelector(`[data-layer="${partValue}"]`);
-            if (layer && component) {
-                layer.querySelector(".content").appendChild(component);
-            }
-        } else {
-            const element = document.getElementById(partName);
-            if (element) {
-                switch (element.getAttribute("type")) {
-                    case "checkbox":
-                        element.checked = partValue.toLowerCase() === "true";
-                        break;
-                    default:
-                        element.value = partValue;
-                        break;
-                }
-            }
-        }
-    });
-
-    for (let i = 0; i < MAX_LAYERS; i++) {
-        updateLayer(i);
-    }
-}
-
-function saveCard() {
-    const code = generateCode();
-
-    localStorage.setItem("cardCode", code);
-}
-
-function showCode() {
-    saveCard();
-
-    const code = generateCode();
-    document.getElementById("cardCode").value = code;
-}
-
-function readCode() {
-    loadCode(document.getElementById("cardCode").value);
-
-    saveCard();
 }
