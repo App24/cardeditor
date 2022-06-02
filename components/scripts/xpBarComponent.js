@@ -13,7 +13,10 @@ function toggleXpBarOptions(element) {
         const options = document.querySelectorAll(`[data-xpbaroption="${value}"]`);
         options.forEach(o => {
             o.classList.remove("hidden");
-            o.querySelectorAll(".updateCard").forEach(c => delete c.dataset.nosave);
+            o.querySelectorAll(".updateCard").forEach(c => {
+                if (c.dataset.nosave != "fixed")
+                    delete c.dataset.nosave;
+            });
         });
     }
 }
