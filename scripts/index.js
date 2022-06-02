@@ -414,46 +414,6 @@ function getUpdateFunc(element) {
     return currentElement.dataset.updatefunc;
 }
 
-function getOptionalComponents(element) {
-    let currentElement = element;
-    while (currentElement && currentElement.dataset.optionalcomponent == undefined) {
-        currentElement = currentElement.parentElement;
-    }
-    if (!currentElement || !currentElement.dataset.optionalcomponent) {
-        return [];
-    }
-    return currentElement.dataset.optionalcomponent.split(" ");
-}
-
-function getRequiredComponents(element) {
-    let currentElement = element;
-    while (currentElement && currentElement.dataset.requiredcomponent == undefined) {
-        currentElement = currentElement.parentElement;
-    }
-    if (!currentElement || !currentElement.dataset.requiredcomponent) {
-        return [];
-    }
-    return currentElement.dataset.requiredcomponent.split(" ");
-}
-
-function getDependantComponents(element) {
-    const requiredComponents = document.querySelectorAll(`[data-requiredcomponent]`);
-    const toReturn = [];
-
-    if (requiredComponents) {
-        requiredComponents.forEach(comp => {
-            comp.dataset.requiredcomponent.split(" ").forEach(c => {
-                if (c === element.dataset.componenttype) {
-                    if (getLayer(comp) >= 0)
-                        toReturn.push(comp.dataset.componenttype);
-                }
-            });
-        });
-    }
-
-    return toReturn;
-}
-
 async function loadImage(path) {
     if (!checkIfFileExists(path)) return;
 

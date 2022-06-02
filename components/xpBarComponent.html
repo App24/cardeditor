@@ -4,15 +4,54 @@
     </div>
     <div class="content hidden">
         <div>
+            <label for="xpBar_type">Type: </label>
+            <select name="xpBar_type" id="xpBar_type" oninput="toggleXpBarOptions(this)" class="updateCard">
+                <option value="circle">Circle</option>
+                <option value="bar">Bar</option>
+            </select>
+        </div>
+
+        <div>
             <label for="xpBar_startColor">Start Color: </label>
             <input type="color" name="xpBar_startColor" id="xpBar_startColor" value="#cc0000" class="updateCard"><br>
 
             <label for="xpBar_endColor">End Color: </label>
             <input type="color" name="xpBar_endColor" id="xpBar_endColor" value="#44cc00" class="updateCard">
         </div>
-        <div>
+
+        <div data-xpbaroption="circle">
             <label for="xpBar_width">Bar Size: </label>
             <input type="range" name="xpBar_width" id="xpBar_width" min="3" max="15" value="10" class="updateCard">
+        </div>
+        
+
+        <div data-xpbaroption="bar">
+            <label for="xpBar_barColor">Bar Color: </label>
+            <input type="color" name="xpBar_barColor" id="xpBar_barColor" value="#272822" class="updateCard">
+        </div>
+        <div data-xpbaroption="bar">
+            <label for="xpBar_size">Bar Width: </label>
+            <input type="range" name="xpBar_size" id="xpBar_size" min="0.5" max="1.5" value="1" step="0.05" class="updateCard">
+        </div>
+        <div data-xpbaroption="bar">
+            <label for="xpBar_height">Bar Height: </label>
+            <input type="range" name="xpBar_height" id="xpBar_height" min="0.5" max="1.5" value="1" step="0.05" class="updateCard">
+        </div>
+        <div data-xpbaroption="bar">
+            <label for="xpBar_round">Roundness: </label>
+            <input id="xpBar_round" name="xpBar_round" type="range" min="0" max="5" value="1" step="0.1"
+                class="updateCard">
+        </div>
+        <div data-xpbaroption="bar">
+            <label for="xpBar_bar_align">Align: </label>
+            <select name="xpBar_bar_align" id="xpBar_bar_align" class="updateCard">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+            </select>
+        </div>
+        <div data-xpbaroption="bar">
+            <component data-component="position" data-noscript data-parentComp="xpBar" data-defaultX="600" data-defaultY="500"></component><br>
         </div>
         <div>
             <label for="xpBar_filled">Bar Filled*: </label>
@@ -20,4 +59,10 @@
                 class="updateCard">
         </div>
     </div>
+
+    <script>
+        function comp_%id%_on_load(){
+            toggleXpBarOptions(document.getElementById("xpBar_type"));
+        }
+    </script>
 </div>
