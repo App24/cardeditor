@@ -6,6 +6,9 @@ function drawLevelsText(canvas, data) {
 
     const fontSize = 50 * level_textSize;
 
+    const x = parseInt(level_positionX);
+    const y = parseInt(level_positionY) + (level_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+
     const levelsText = `Level: ${level_text}`;
 
     ctx.textBaseline = level_textBaseline;
@@ -15,7 +18,7 @@ function drawLevelsText(canvas, data) {
     if (level_strokeSize > 0) {
         ctx.strokeStyle = level_strokeColor;
         ctx.lineWidth = level_strokeSize;
-        ctx.strokeText(levelsText, level_positionX, level_positionY);
+        ctx.strokeText(levelsText, x, y);
     }
-    ctx.fillText(levelsText, level_positionX, level_positionY);
+    ctx.fillText(levelsText, x, y);
 }

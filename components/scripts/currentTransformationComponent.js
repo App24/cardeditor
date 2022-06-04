@@ -8,6 +8,9 @@ function drawCurrentTransformation(canvas, data) {
 
     const fontSize = fitTextOnCanvas(ctx, currentRankText, canvasWidth);
 
+    const x = parseInt(currentTransformation_positionX);
+    const y = parseInt(currentTransformation_positionY) + (currentTransformation_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.textBaseline = currentTransformation_textBaseline;
     ctx.fillStyle = currentTransformation_textColor;
@@ -15,7 +18,7 @@ function drawCurrentTransformation(canvas, data) {
     if (currentTransformation_strokeSize > 0) {
         ctx.strokeStyle = currentTransformation_strokeColor;
         ctx.lineWidth = currentTransformation_strokeSize;
-        ctx.strokeText(currentRankText, currentTransformation_positionX, currentTransformation_positionY);
+        ctx.strokeText(currentRankText, x, y);
     }
-    ctx.fillText(currentRankText, currentTransformation_positionX, currentTransformation_positionY);
+    ctx.fillText(currentRankText, x, y);
 }

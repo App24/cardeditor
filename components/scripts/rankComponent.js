@@ -8,6 +8,9 @@ function drawRank(canvas, data) {
 
     const lbPositionText = `Rank: #${rank_text}`;
 
+    const x = parseInt(rank_positionX);
+    const y = parseInt(rank_positionY) + (rank_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+
     ctx.textBaseline = rank_textBaseline;
     ctx.fillStyle = rank_textColor;
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
@@ -15,7 +18,7 @@ function drawRank(canvas, data) {
     if (rank_strokeSize > 0) {
         ctx.strokeStyle = rank_strokeColor;
         ctx.lineWidth = rank_strokeSize;
-        ctx.strokeText(lbPositionText, rank_positionX, rank_positionY);
+        ctx.strokeText(lbPositionText, x, y);
     }
-    ctx.fillText(lbPositionText, rank_positionX, rank_positionY);
+    ctx.fillText(lbPositionText, x, y);
 }

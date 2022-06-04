@@ -13,8 +13,8 @@ function drawXpText(canvas, data) {
 
     const ctx = canvas.getContext("2d");
 
-    let x = xp_positionX;
-    let y = xp_positionY;
+    let x = parseInt(xp_positionX);
+    let y = parseInt(xp_positionY);
 
     if (xp_middleLevel) {
         const fontSize = 50 * getValue("level_textSize");
@@ -41,7 +41,7 @@ function drawXpText(canvas, data) {
     if (xp_strokeSize > 0) {
         ctx.strokeStyle = xp_strokeColor;
         ctx.lineWidth = xp_strokeSize;
-        ctx.strokeText(xp_text, x, y);
+        ctx.strokeText(xp_text, x, y + (xp_textBaseline == "top" ? getPositionDiff(xpFontSize) : 0));
     }
-    ctx.fillText(xp_text, x, y);
+    ctx.fillText(xp_text, x, y + (xp_textBaseline == "top" ? getPositionDiff(xpFontSize) : 0));
 }

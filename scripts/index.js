@@ -9,6 +9,8 @@ const CANVAS_FONT = "Comic Sans MS";
 
 const MAX_LAYERS = 6;
 
+const POSITION_DIFF = 20;
+
 String.prototype.removeHash = function () {
     if (this.startsWith("#")) {
         return this.substring(1, this.length);
@@ -499,4 +501,8 @@ function rgbToHsl(r, g, b) {
         s,
         l
     };
+}
+
+function getPositionDiff(fontSize) {
+    return 0.3833333333333333 * fontSize;
 }

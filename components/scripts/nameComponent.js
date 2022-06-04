@@ -15,7 +15,8 @@ function drawName(canvas, data) {
 
     const fontSize = 60 * name_textSize;
 
-    console.log(name_matchRole);
+    const x = parseInt(name_positionX);
+    const y = parseInt(name_positionY) + (name_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
 
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.fillStyle = name_matchRole ? "white" : name_textColor;
@@ -24,7 +25,7 @@ function drawName(canvas, data) {
     if (name_strokeSize > 0) {
         ctx.strokeStyle = name_strokeColor;
         ctx.lineWidth = name_strokeSize;
-        ctx.strokeText(name_text, name_positionX, name_positionY);
+        ctx.strokeText(name_text, x, y);
     }
-    ctx.fillText(name_text, name_positionX, name_positionY);
+    ctx.fillText(name_text, x, y);
 }
