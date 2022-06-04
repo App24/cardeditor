@@ -1,13 +1,24 @@
+function toggleNameColor(element) {
+    const textColor = document.getElementById("name_textColor").parentElement;
+    if (element.checked) {
+        textColor.classList.add("hidden");
+    } else {
+        textColor.classList.remove("hidden");
+    }
+}
+
 function drawName(canvas, data) {
-    const { name_text, name_textSize, name_textAlign, name_textBaseline, name_strokeSize, name_textColor, name_strokeColor } = data;
+    const { name_text, name_matchRole, name_textSize, name_textAlign, name_textBaseline, name_strokeSize, name_textColor, name_strokeColor } = data;
     const { name_positionX, name_positionY } = data;
 
     const ctx = canvas.getContext("2d");
 
     const fontSize = 60 * name_textSize;
 
+    console.log(name_matchRole);
+
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
-    ctx.fillStyle = name_textColor;
+    ctx.fillStyle = name_matchRole ? "white" : name_textColor;
     ctx.textBaseline = name_textBaseline;
     ctx.textAlign = name_textAlign;
     if (name_strokeSize > 0) {

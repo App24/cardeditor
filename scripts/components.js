@@ -54,11 +54,13 @@ async function loadComponents(i = 0) {
                                 scriptText.remove();
                             }
                         }
+
                         {
                             for (const child of component.children) {
                                 parent.appendChild(child);
                             }
                         }
+
                         currentComponentId++;
                         resolve();
                     }
