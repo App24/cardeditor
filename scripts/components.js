@@ -5,6 +5,7 @@ async function loadComponents(i = 0) {
     if (!components || !components.length) return;
     await asyncForEach(components, async (component) => {
         const file = component.dataset.component;
+        const parent = component.parentElement;
         if (!file) return;
         const componentFile = `components/${file}Component.html`;
         await new Promise((resolve, error) => {
@@ -51,6 +52,11 @@ async function loadComponents(i = 0) {
                                     await init_func(component);
                                 }
                                 scriptText.remove();
+                            }
+                        }
+                        {
+                            for (const child of component.children) {
+                                parent.appendChild(child);
                             }
                         }
                         currentComponentId++;
