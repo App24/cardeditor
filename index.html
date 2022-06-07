@@ -1,52 +1,17 @@
-<html>
+<html lang="en">
 
 <head>
     <title>Card Editor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="scripts/index.js"></script>
-    <script src="scripts/menu.js"></script>
-    <script src="scripts/cardCode.js"></script>
-    <script src="scripts/components.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="./scripts/index.mjs" type="module"></script>
 </head>
 
 <body>
     <div id="dragging-heaven"></div>
-    <div class="menu" id="settings">
-        <div class="label">
-            Settings
-        </div>
-        <div class="content hidden">
-            <div class="menu layer-menu" data-layer="-1">
-                <div class="label">
-                    Available Widgets
-                </div>
-                <div class="content hidden">
-                    <component data-ignoreMenuOpen data-component="background"></component>
-                    <component data-ignoreMenuOpen data-component="name"></component>
-                    <component data-ignoreMenuOpen data-component="pfp"></component>
-                    <component data-ignoreMenuOpen data-component="pfpCircle"></component>
-                    <component data-ignoreMenuOpen data-component="wings"></component>
-                    <component data-ignoreMenuOpen data-component="level"></component>
-                    <component data-ignoreMenuOpen data-component="xp"></component>
-                    <component data-ignoreMenuOpen data-component="xpBar"></component>
-                    <component data-ignoreMenuOpen data-component="rank"></component>
-                    <component data-ignoreMenuOpen data-component="currentTransformation"></component>
-                    <component data-ignoreMenuOpen data-component="nextTransformation"></component>
-                </div>
-            </div>
-            <layers></layers>
-
-            <p>*won't be saved</p>
-
-            <!-- <input type="button" value="Save" onclick="saveCard()"> -->
-            <input type="button" value="Generate Code" onclick="showCode()">
-            <input type="button" value="Load Code" onclick="readCode()">
-            <input type="button" value="Load Default Code" onclick="loadDefaultCode()"><br>
-            <label for="cardCode">Code: </label>
-            <input type="text" name="cardCode" id="cardCode" style="width: 30vw"><br>
-            Do w!cardcode, select "set", and then reply with the code generated here!
-        </div>
-    </div>
+    <div id="settings"></div>
 
     <fieldset id="cardCanvas">
         <legend>Card</legend>
@@ -57,16 +22,16 @@
             position: absolute;
         }
 
-        .hidden {
-            display: none;
-        }
-
         .menu {
             color: white;
         }
 
-        .menu .label:hover {
+        .openableMenu:hover {
             cursor: pointer;
+        }
+
+        .emptyMenu:hover {
+            cursor: no-drop;
         }
 
         .menu .label {
