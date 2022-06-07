@@ -34,7 +34,7 @@ export class TextInfoComponent extends SubComponent {
             new DropDownDataType("Text Baseline", `textBaseline`, {
                 defaultValue: this.defaultTextBaseline,
                 values: [{ name: "Top", value: "top" },
-                { name: "Center", value: "hanging" },
+                { name: "Hanging", value: "hanging" },
                 { name: "Middle", value: "middle" },
                 { name: "Alphabetic", value: "alphabetic" },
                 { name: "Ideographic", value: "ideographic" },

@@ -86,10 +86,19 @@ export async function loadImage(path) {
 
 export function getPositionDiff(fontSize, textBaseline) {
     switch (textBaseline) {
-        default:
-            return 0;
         case "top":
             return 0.3833333333333333 * fontSize;
+        case "hanging":
+            return 0.2333333333333333 * fontSize;
+        case "middle":
+            return 0.1666666666666667 * fontSize;
+        default:
+        case "alphabetic":
+            return 0;
+        case "ideographic":
+            return 1.4 * fontSize;
+        case "bottom":
+            return -0.05 * fontSize;
     }
 }
 
