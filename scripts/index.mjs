@@ -235,10 +235,12 @@ class Application {
             const value = valueParts.join("=");
             if (key.startsWith("cl_")) {
                 const component = this.components.find(c => c.componentId === key.substring(3));
-                const componentMenu = this.menus.find(m => m.menu.dataset.component === component.componentId);
-                const layerMenu = this.menus.find(m => m.menu.dataset.layer === value);
-                if (layerMenu && componentMenu) {
-                    layerMenu.addContent(componentMenu);
+                if (component) {
+                    const componentMenu = this.menus.find(m => m.menu.dataset.component === component.componentId);
+                    const layerMenu = this.menus.find(m => m.menu.dataset.layer === value);
+                    if (layerMenu && componentMenu) {
+                        layerMenu.addContent(componentMenu);
+                    }
                 }
             }
         });
