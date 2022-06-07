@@ -223,7 +223,14 @@ class Application {
                     const value = valueParts.join("=");
                     if (key.startsWith("cl_")) return;
                     if (dataType.valueElement.id === key) {
-                        dataType.value = value;
+                        switch (dataType.valueElement.type) {
+                            case "checkbox":
+                                dataType.value = value == "true";
+                                break;
+                            default:
+                                dataType.value = value;
+                                break;
+                        }
                     }
                 });
             });
