@@ -79,38 +79,13 @@ export class WingsComponent extends Component {
         if (wingsImages.length >= 2) {
             if (wingsImages[0]) {
                 drawWings(wingsImages[0], wingsTemplateImage, "source-in");
-                // const wings = wingsImages[0];
-                // const wingsX = pfpX - wings.width / 2.;
-                // const wingsY = ((pfpRadius + (canvasHeight / 2.3) - pfpRadius) - wings.height / 2.);
-    
-                // if (!wingsTemplateImage) {
-                //     ctx.drawImage(wings, wingsX, wingsY);
-                // }
-                // else {
-                //     ctx.drawImage(drawMaskedImage(wingsTemplateImage, wings, "source-in"), wingsX, wingsY);
-                // }
             }
     
             if (wingsImages[1]) {
                 drawWings(wingsImages[1], wingsTemplateImage, "source-out");
-                // const wings = wingsImages[1];
-                // const wingsX = pfpX - wings.width / 2.;
-                // const wingsY = ((pfpRadius + (canvasHeight / 2.3) - pfpRadius) - wings.height / 2.);
-    
-                // if (!wingsTemplateImage) {
-                //     ctx.drawImage(wings, wingsX, wingsY);
-                // }
-                // else {
-                //     ctx.drawImage(drawMaskedImage(wingsTemplateImage, wings, "source-out"), wingsX, wingsY);
-                // }
             }
         } else if (wingsImages[0]) {
             drawWings(wingsImages[0], null, "source-in");
-            // const wings = wingsImages[0];
-            // const wingsX = pfpX - wings.width / 2.;
-            // const wingsY = ((pfpRadius + (canvasHeight / 2.3) - pfpRadius) - wings.height / 2.);
-    
-            // ctx.drawImage(wings, wingsX, wingsY);
         }
     }
 

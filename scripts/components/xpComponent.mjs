@@ -14,9 +14,21 @@ export class XpComponent extends Component {
         ];
         this.subComponents[1].disableTextSave();
         this.dataTypes = [
-            new CheckboxDataType("Snap to middle of levels text", "middleLevel", true)
+            new CheckboxDataType("Snap to middle of levels text", "middleLevel", true, () => this.togglePosition())
         ];
         this.requiredComponents = [{ id: "levels", validation: () => this.centerText() }];
+    }
+
+    togglePosition() {
+        if (this.values.middleLevel) {
+            this.subComponents[0].hide();
+        } else {
+            this.subComponents[0].show();
+        }
+    }
+
+    onLoad() {
+        this.togglePosition();
     }
 
     centerText() {
