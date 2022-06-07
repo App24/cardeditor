@@ -9,7 +9,7 @@ function drawNextTransformation(canvas, data) {
     const fontSize = fitTextOnCanvas(ctx, nextRankText, canvasWidth);
 
     const x = parseInt(nextTransformation_positionX);
-    const y = parseInt(nextTransformation_positionY) + (nextTransformation_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+    const y = parseInt(nextTransformation_positionY) + getPositionDiff(fontSize, nextTransformation_textBaseline);
 
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.textBaseline = nextTransformation_textBaseline;

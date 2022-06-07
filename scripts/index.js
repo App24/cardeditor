@@ -503,6 +503,11 @@ function rgbToHsl(r, g, b) {
     };
 }
 
-function getPositionDiff(fontSize) {
-    return 0.3833333333333333 * fontSize;
+function getPositionDiff(fontSize, textBaseline) {
+    switch (textBaseline) {
+        default:
+            return 0;
+        case "top":
+            return 0.3833333333333333 * fontSize;
+    }
 }

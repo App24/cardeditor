@@ -9,7 +9,7 @@ function drawCurrentTransformation(canvas, data) {
     const fontSize = fitTextOnCanvas(ctx, currentRankText, canvasWidth);
 
     const x = parseInt(currentTransformation_positionX);
-    const y = parseInt(currentTransformation_positionY) + (currentTransformation_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+    const y = parseInt(currentTransformation_positionY) + getPositionDiff(fontSize, currentTransformation_textBaseline);
 
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.textBaseline = currentTransformation_textBaseline;

@@ -41,7 +41,7 @@ function drawXpText(canvas, data) {
     if (xp_strokeSize > 0) {
         ctx.strokeStyle = xp_strokeColor;
         ctx.lineWidth = xp_strokeSize;
-        ctx.strokeText(xp_text, x, y + (xp_textBaseline == "top" ? getPositionDiff(xpFontSize) : 0));
+        ctx.strokeText(xp_text, x, y + getPositionDiff(xpFontSize, xp_textBaseline));
     }
-    ctx.fillText(xp_text, x, y + (xp_textBaseline == "top" ? getPositionDiff(xpFontSize) : 0));
+    ctx.fillText(xp_text, x, y + getPositionDiff(xpFontSize, xp_textBaseline));
 }

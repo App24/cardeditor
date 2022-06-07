@@ -7,7 +7,7 @@ function drawLevelsText(canvas, data) {
     const fontSize = 50 * level_textSize;
 
     const x = parseInt(level_positionX);
-    const y = parseInt(level_positionY) + (level_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+    const y = parseInt(level_positionY) + getPositionDiff(fontSize, level_textBaseline);
 
     const levelsText = `Level: ${level_text}`;
 

@@ -9,7 +9,7 @@ function drawRank(canvas, data) {
     const lbPositionText = `Rank: #${rank_text}`;
 
     const x = parseInt(rank_positionX);
-    const y = parseInt(rank_positionY) + (rank_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+    const y = parseInt(rank_positionY) + getPositionDiff(fontSize, rank_textBaseline);
 
     ctx.textBaseline = rank_textBaseline;
     ctx.fillStyle = rank_textColor;

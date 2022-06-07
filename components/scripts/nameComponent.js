@@ -16,7 +16,7 @@ function drawName(canvas, data) {
     const fontSize = 60 * name_textSize;
 
     const x = parseInt(name_positionX);
-    const y = parseInt(name_positionY) + (name_textBaseline == "top" ? getPositionDiff(fontSize) : 0);
+    const y = parseInt(name_positionY) + getPositionDiff(fontSize, name_textBaseline);
 
     ctx.font = `${fontSize}px ${CANVAS_FONT}`;
     ctx.fillStyle = name_matchRole ? "white" : name_textColor;
