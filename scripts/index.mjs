@@ -343,6 +343,8 @@ class Application {
 
                             if (parentElement == null) {
                                 componentMenu.parentMenu.addContent(componentMenu);
+                                componentMenu.parentMenu.openMenu();
+                                await this.drawLayer(componentMenu.parentMenu.menu.dataset.layer);
                                 return;
                             }
 

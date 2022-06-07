@@ -21,6 +21,7 @@ export class Menu {
 
         if (draggable) {
             const svg = document.createElement("svg");
+            svg.id = "drag";
             const use = document.createElement("use");
             use.setAttribute("href", "#draggable");
             svg.appendChild(use);
@@ -68,7 +69,7 @@ export class Menu {
         }
     }
 
-    _checkClass(){
+    _checkClass() {
         if (this.isEmpty()) {
             this.label.classList.remove("openableMenu");
             this.label.classList.add("emptyMenu");
