@@ -3,16 +3,17 @@ import { ButtonDataType } from "../dataTypes/buttonDataType.mjs";
 import { NumberDataType } from "../dataTypes/numberDataType.mjs";
 
 export class PositionComponent extends SubComponent {
-    constructor(defaultX, defaultY) {
-        super("Position");
+    constructor(defaultX, defaultY, customText = "Position", customId = "position") {
+        super(customText);
         this.defaultX = defaultX;
         this.defaultY = defaultY;
+        this.customId = customId;
     }
 
     createDataTypes() {
         this.dataTypes = [
-            new NumberDataType("Position X", `positionX`, this.defaultX),
-            new NumberDataType("Position Y", `positionY`, this.defaultY),
+            new NumberDataType("Position X", `${this.customId}X`, this.defaultX),
+            new NumberDataType("Position Y", `${this.customId}Y`, this.defaultY),
             new ButtonDataType("Reset to default", `resetButton`, () => {
                 this.dataTypes[0].value = this.defaultX;
                 this.dataTypes[1].value = this.defaultY;
