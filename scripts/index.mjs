@@ -157,6 +157,7 @@ class Application {
                     input.name = "cardCode";
                     input.id = "cardCode";
                     input.style.width = "30vw";
+                    input.style.minWidth = "360px";
 
                     settingsMenu.addContent(label);
                     settingsMenu.addContent(input);
