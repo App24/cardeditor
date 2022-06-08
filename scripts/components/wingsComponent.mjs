@@ -65,7 +65,6 @@ export class WingsComponent extends Component {
 
         const drawWings = (wingsImage, templateImage, globalCompositeOperation) => {
             const wingsX = pfpX - wingsImage.width / 2.;
-            // const wingsY = ((pfpRadius + (canvasHeight / 2.3) - pfpRadius) - wingsImage.height / 2.);
             const wingsY = pfpY - wingsImage.height / 2.;
     
             if (!templateImage) {
@@ -105,8 +104,12 @@ export class WingsComponent extends Component {
     toggleCustomWings() {
         if (this.values.type == "custom") {
             this.dataTypes[3].show();
+            this.dataTypes[4].hide();
+            this.dataTypes[5].hide();
         } else {
             this.dataTypes[3].hide();
+            this.dataTypes[4].show();
+            this.dataTypes[5].show();
         }
     }
 }

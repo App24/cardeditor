@@ -45,7 +45,10 @@ export class CheckboxDataType extends DataType {
     }
 
     set value(val) {
-        this.valueElement.checked = val;
+        if (typeof val != "boolean")
+            this.valueElement.checked = val == "true";
+        else
+            this.valueElement.checked = val;
     }
 
     get parentElement() {

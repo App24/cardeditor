@@ -10,9 +10,10 @@ import { WingsComponent } from "./components/wingsComponent.mjs";
 import { XpBarComponent } from "./components/xpBarComponent.mjs";
 import { XpComponent } from "./components/xpComponent.mjs";
 import { Menu } from "./menu.mjs";
-import { MAX_LAYERS, CARD_WIDTH, CARD_HEIGHT } from "./constants.mjs"
+import { MAX_LAYERS, CARD_WIDTH, CARD_HEIGHT, DEFAULT_CODE } from "./constants.mjs"
 import { asyncForEach } from "./utils.mjs"
 import { SubComponent } from "./subComponent.mjs";
+import { RoleIconComponent } from "./components/roleIconComponent.mjs";
 
 class Application {
     constructor() {
@@ -135,7 +136,7 @@ class Application {
                     input.style.marginLeft = "0.3vw";
 
                     input.addEventListener("click", () => {
-                        this.loadCode("background_primaryColor=#363636|background_secondaryColor=#363636|background_template=normal|background_round=1|name_matchRole=true|name_type=nickname|name_positionX=600|name_positionY=5|name_textAlign=center|name_textBaseline=top|name_textSize=1|name_strokeColor=#000000|name_strokeSize=3|pfp_size=1|pfp_positionX=600|pfp_positionY=260|pfpCircle_width=10|pfpCircle_color=#000000|wings_followPfp=true|wings_template=normal|wings_type=default|levels_positionX=10|levels_positionY=5|levels_textAlign=left|levels_textBaseline=top|levels_textColor=#ffffff|levels_textSize=1|levels_strokeColor=#000000|levels_strokeSize=0|xp_middleLevel=true|xp_positionX=100|xp_positionY=62|xp_textAlign=center|xp_textBaseline=top|xp_textColor=#ffffff|xp_textSize=1|xp_strokeColor=#000000|xp_strokeSize=0|xpBar_type=circle|xpBar_startColor=#cc0000|xpBar_endColor=#44cc00|xpBar_width=10|rank_positionX=1190|rank_positionY=5|rank_textAlign=right|rank_textBaseline=top|rank_textColor=#ffffff|rank_textSize=1|rank_strokeColor=#000000|rank_strokeSize=0|currentTransformation_positionX=600|currentTransformation_positionY=500|currentTransformation_textAlign=center|currentTransformation_textBaseline=bottom|currentTransformation_textColor=#ffffff|currentTransformation_strokeColor=#000000|currentTransformation_strokeSize=0|nextTransformation_positionX=600|nextTransformation_positionY=600|nextTransformation_textAlign=center|nextTransformation_textBaseline=bottom|nextTransformation_textColor=#ffffff|nextTransformation_strokeColor=#000000|nextTransformation_strokeSize=0|cl_background=0|cl_name=2|cl_pfp=5|cl_pfpCircle=3|cl_wings=1|cl_levels=3|cl_xp=3|cl_xpBar=4|cl_rank=3|cl_currentTransformation=3|cl_nextTransformation=3");
+                        this.loadCode(DEFAULT_CODE);
 
                         this.menus.forEach(menu => {
                             menu.closeMenu();
@@ -182,6 +183,7 @@ class Application {
             this.addComponent(new RankComponent());
             this.addComponent(new CurrentTransformationComponent());
             this.addComponent(new NextTransformationComponent());
+            this.addComponent(new RoleIconComponent());
 
             {
                 this.components.forEach(component => {
@@ -216,22 +218,15 @@ class Application {
         if (code === undefined) return;
         const parts = code.split("|");
 
-        this.components.forEach(component => {
-            component.dataTypes.forEach(dataType => {
-                parts.forEach(part => {
-                    const valueParts = part.split("=");
-                    const key = valueParts.shift();
-                    const value = valueParts.join("=");
-                    if (key.startsWith("cl_")) return;
+        parts.forEach(part => {
+            const valueParts = part.split("=");
+            const key = valueParts.shift();
+            const value = valueParts.join("=");
+            if (key.startsWith("cl_")) return;
+            this.components.forEach(component => {
+                component.dataTypes.forEach(dataType => {
                     if (dataType.valueElement.id === key) {
-                        switch (dataType.valueElement.type) {
-                            case "checkbox":
-                                dataType.value = value == "true";
-                                break;
-                            default:
-                                dataType.value = value;
-                                break;
-                        }
+                        dataType.value = value;
                     }
                 });
             });

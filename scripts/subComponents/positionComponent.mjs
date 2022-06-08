@@ -12,8 +12,8 @@ export class PositionComponent extends SubComponent {
 
     createDataTypes() {
         this.dataTypes = [
-            new NumberDataType("Position X", `${this.customId}X`, this.defaultX),
-            new NumberDataType("Position Y", `${this.customId}Y`, this.defaultY),
+            new NumberDataType(`${this.name} X`, `${this.customId}X`, this.defaultX),
+            new NumberDataType(`${this.name} Y`, `${this.customId}Y`, this.defaultY),
             new ButtonDataType("Reset to default", `resetButton`, () => {
                 this.dataTypes[0].value = this.defaultX;
                 this.dataTypes[1].value = this.defaultY;
