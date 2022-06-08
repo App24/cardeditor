@@ -33,10 +33,10 @@ export class XpComponent extends Component {
         }
     }
 
-    toggleOffset(){
-        if(this.values.autoOffset){
+    toggleOffset() {
+        if (this.values.autoOffset) {
             this.subComponents[1].hide();
-        }else{
+        } else {
             this.subComponents[1].show();
         }
     }
@@ -67,6 +67,8 @@ export class XpComponent extends Component {
         const strokeColor = this.subComponents[2].values.strokeColor;
         const strokeSize = this.subComponents[2].values.strokeSize;
 
+        const font = this.subComponents[2].values.textFont;
+
         let x = parseInt(positionX);
         let y = parseInt(positionY);
 
@@ -75,7 +77,9 @@ export class XpComponent extends Component {
 
             const levelsText = `Level: ${this.requiredComponents[0].component.subComponents[1].values.text}`;
 
-            ctx.font = `${fontSize}px ${CANVAS_FONT}`;
+            const levelsFont = this.requiredComponents[0].component.subComponents[1].values.textFont;
+
+            ctx.font = `${fontSize}px ${levelsFont}`;
             ctx.textBaseline = this.requiredComponents[0].component.subComponents[1].values.textBaseline;
             ctx.textAlign = this.requiredComponents[0].component.subComponents[1].values.textAlign;
 
@@ -95,7 +99,7 @@ export class XpComponent extends Component {
 
         y += getPositionDiff(xpFontSize, textBaseline);
 
-        ctx.font = `${xpFontSize}px ${CANVAS_FONT}`;
+        ctx.font = `${xpFontSize}px ${font}`;
         ctx.fillStyle = textColor;
         ctx.textBaseline = textBaseline;
         ctx.textAlign = textAlign;

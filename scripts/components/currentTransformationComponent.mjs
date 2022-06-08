@@ -31,10 +31,12 @@ export class CurrentTransformationComponent extends Component {
 
         const fontSize = fitTextOnCanvas(ctx, currentRankText, CARD_WIDTH);
 
+        const font = this.subComponents[1].values.textFont;
+
         const x = parseInt(positionX);
         const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline);
 
-        ctx.font = `${fontSize}px ${CANVAS_FONT}`;
+        ctx.font = `${fontSize}px ${font}`;
         ctx.textBaseline = textBaseline;
         ctx.fillStyle = textColor;
         ctx.textAlign = textAlign;

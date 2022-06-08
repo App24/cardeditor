@@ -1,5 +1,6 @@
 import { SubComponent } from "../subComponent.mjs";
 import { DropDownDataType } from "../dataTypes/dropdownDataType.mjs";
+import { FontDataType } from "../dataTypes/fontDataType.mjs";
 import { ColorDataType } from "../dataTypes/colorDataType.mjs";
 import { SliderDataType } from "../dataTypes/sliderDataType.mjs";
 import { TextDataType } from "../dataTypes/textDataType.mjs"
@@ -25,6 +26,12 @@ export class TextInfoComponent extends SubComponent {
     createDataTypes() {
         this.dataTypes = [
             new TextDataType("Text", `text`, this.defaultText, this.saveText),
+            new FontDataType("Font", "textFont", {
+                defaultValue: "Comic Sans MS",
+                values: [
+                    { value: "Comic Sans MS" }
+                ]
+            }),
             new DropDownDataType("Text Alignment", `textAlign`, {
                 defaultValue: this.defaultTextAlign,
                 values: [{ name: "Left", value: "left" },

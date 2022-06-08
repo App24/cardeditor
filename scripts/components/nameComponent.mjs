@@ -53,12 +53,14 @@ export class NameComponent extends Component {
 
         const fontSize = 60 * textSize;
 
+        const font = this.subComponents[1].values.textFont;
+        
         const x = parseInt(positionX);
         const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline);
 
         ctx.textBaseline = textBaseline;
         ctx.fillStyle = matchRole ? "white" : textColor;
-        ctx.font = `${fontSize}px ${CANVAS_FONT}`;
+        ctx.font = `${fontSize}px ${font}`;
         ctx.textAlign = textAlign;
         if (strokeSize > 0) {
             ctx.strokeStyle = strokeColor;

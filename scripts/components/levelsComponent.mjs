@@ -28,6 +28,8 @@ export class LevelsComponent extends Component {
         const strokeColor = this.subComponents[1].values.strokeColor;
         const strokeSize = this.subComponents[1].values.strokeSize;
 
+        const font = this.subComponents[1].values.textFont;
+
         const fontSize = 50 * textSize;
 
         const x = parseInt(positionX);
@@ -37,7 +39,7 @@ export class LevelsComponent extends Component {
 
         ctx.textBaseline = textBaseline;
         ctx.fillStyle = textColor;
-        ctx.font = `${fontSize}px ${CANVAS_FONT}`;
+        ctx.font = `${fontSize}px ${font}`;
         ctx.textAlign = textAlign;
         if (strokeSize > 0) {
             ctx.strokeStyle = strokeColor;
