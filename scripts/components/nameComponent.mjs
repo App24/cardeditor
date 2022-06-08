@@ -29,9 +29,9 @@ export class NameComponent extends Component {
 
     toggleTextColor() {
         if (this.values.matchRole) {
-            this.subComponents[1].dataTypes[3].hide();
+            this.subComponents[1].dataTypes[4].hide();
         } else {
-            this.subComponents[1].dataTypes[3].show();
+            this.subComponents[1].dataTypes[4].show();
         }
     }
 
