@@ -281,14 +281,14 @@ class Application {
             this.menus.push(componentMenu);
 
             {
-                componentMenu.label.addEventListener("mousedown", (e) => {
+                const initDragging = (e) => {
                     componentMenu.clicked = true;
                     componentMenu.dragging = false;
                     componentMenu.clientX = e.clientX;
                     componentMenu.clientY = e.clientY;
-                });
+                };
 
-                addEventListener("mousemove", async (e) => {
+                const startDragging = async (e) => {
                     if (componentMenu.clicked) {
                         const diffX = e.clientX - componentMenu.clientX;
                         const diffY = e.clientY - componentMenu.clientY;
@@ -305,16 +305,16 @@ class Application {
                             await this.drawLayer(componentMenu.parentMenu.menu.dataset.layer);
                         }
                     }
-                });
+                };
 
-                addEventListener("mousemove", (e) => {
+                const dragComponent = (e) => {
                     if (componentMenu.dragging) {
                         componentMenu.menu.style.left = e.clientX;
                         componentMenu.menu.style.top = e.clientY;
                     }
-                });
+                }
 
-                addEventListener("mouseup", async (e) => {
+                const releaseComponent = async (e) => {
                     if (componentMenu.dragging) {
                         componentMenu.dragging = false;
                         componentMenu.menu.classList.remove("dragging");
@@ -387,6 +387,38 @@ class Application {
                         componentMenu.clicked = false;
                         componentMenu.dragging = false;
                     }
+                }
+
+                componentMenu.label.addEventListener("mousedown", (e) => {
+                    initDragging(e);
+                });
+
+                componentMenu.label.addEventListener("touchstart", (e) => {
+                    initDragging(e.changedTouches[0]);
+                });
+
+                addEventListener("mousemove", async (e) => {
+                    await startDragging(e);
+                });
+
+                addEventListener("touchmove", async (e) => {
+                    await startDragging(e.changedTouches[0]);
+                });
+
+                addEventListener("mousemove", (e) => {
+                    dragComponent(e);
+                });
+
+                addEventListener("touchmove", (e) => {
+                    dragComponent(e.changedTouches[0]);
+                });
+
+                addEventListener("mouseup", async (e) => {
+                    await releaseComponent(e);
+                });
+
+                addEventListener("touchend", async (e) => {
+                    await releaseComponent(e.changedTouches[0]);
                 });
             }
         } else {
