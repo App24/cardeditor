@@ -73,21 +73,23 @@ export class XpComponent extends Component {
         let y = parseInt(positionY);
 
         if (this.centerText()) {
-            const fontSize = 50 * this.requiredComponents[0].component.subComponents[1].values.textSize;
+            const levelsComponent = this.requiredComponents[0].component;
 
-            const levelsText = `Level: ${this.requiredComponents[0].component.subComponents[1].values.text}`;
+            const fontSize = 50 * levelsComponent.subComponents[1].values.textSize;
 
-            const levelsFont = this.requiredComponents[0].component.subComponents[1].values.textFont;
+            const levelsText = `Level: ${levelsComponent.subComponents[1].values.text}`;
+
+            const levelsFont = levelsComponent.subComponents[1].values.textFont;
 
             ctx.font = `${fontSize}px ${levelsFont}`;
-            ctx.textBaseline = this.requiredComponents[0].component.subComponents[1].values.textBaseline;
-            ctx.textAlign = this.requiredComponents[0].component.subComponents[1].values.textAlign;
+            ctx.textBaseline = levelsComponent.subComponents[1].values.textBaseline;
+            ctx.textAlign = levelsComponent.subComponents[1].values.textAlign;
 
             const metrics = ctx.measureText(levelsText);
             const actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-            x = parseInt(this.requiredComponents[0].component.subComponents[0].values.positionX) + (metrics.width / 2.);
-            y = parseInt(this.requiredComponents[0].component.subComponents[0].values.positionY);
+            x = parseInt(levelsComponent.subComponents[0].values.positionX) + (metrics.width / 2.);
+            y = parseInt(levelsComponent.subComponents[0].values.positionY);
             if (this.values.autoOffset) {
                 y += (actualHeight * 1.4);
             } else {

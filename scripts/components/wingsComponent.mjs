@@ -44,6 +44,8 @@ export class WingsComponent extends Component {
     }
 
     async draw(ctx) {
+        const pfpComponent = this.requiredComponents[0].component;
+
         const wingsTemplatePath = `${TEMPLATES_FOLDER}/${this.values.template}.png`;
 
         const wingsTemplateImage = await loadImage(wingsTemplatePath);
@@ -63,12 +65,12 @@ export class WingsComponent extends Component {
             }
         }
 
-        const pfpX = this.values.followPfp ? this.requiredComponents[0].component.subComponents[0].values.positionX : this.subComponents[0].values.positionX;
-        const pfpY = this.values.followPfp ? this.requiredComponents[0].component.subComponents[0].values.positionY : this.subComponents[0].values.positionY;
+        const pfpX = this.values.followPfp ? pfpComponent.subComponents[0].values.positionX : this.subComponents[0].values.positionX;
+        const pfpY = this.values.followPfp ? pfpComponent.subComponents[0].values.positionY : this.subComponents[0].values.positionY;
 
         const drawWings = (wingsImage, templateImage, globalCompositeOperation) => {
-            const wingsWidth = (wingsImage.width * (this.values.autoSize ? this.requiredComponents[0].component.values.size : this.subComponents[1].values.scaleX));
-            const wingsHeight = (wingsImage.height * (this.values.autoSize ? this.requiredComponents[0].component.values.size : this.subComponents[1].values.scaleY));
+            const wingsWidth = (wingsImage.width * (this.values.autoSize ? pfpComponent.values.size : this.subComponents[1].values.scaleX));
+            const wingsHeight = (wingsImage.height * (this.values.autoSize ? pfpComponent.values.size : this.subComponents[1].values.scaleY));
 
             const wingsX = pfpX - wingsWidth / 2.;
             const wingsY = pfpY - wingsHeight / 2.;
@@ -118,13 +120,13 @@ export class WingsComponent extends Component {
 
     toggleCustomWings() {
         if (this.values.type == "custom") {
-            this.dataTypes[3].show();
-            this.dataTypes[4].hide();
-            this.dataTypes[5].hide();
-        } else {
-            this.dataTypes[3].hide();
             this.dataTypes[4].show();
+            this.dataTypes[5].hide();
+            this.dataTypes[6].hide();
+        } else {
+            this.dataTypes[4].hide();
             this.dataTypes[5].show();
+            this.dataTypes[6].show();
         }
     }
 }

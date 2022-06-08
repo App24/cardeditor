@@ -49,11 +49,13 @@ export class XpBarComponent extends Component {
         switch (this.values.type) {
             default:
             case "circle": {
+                const pfpComponent = this.requiredComponents[0].component;
+
                 const size = parseInt(this.values.width);
 
-                const pfpRadius = 130 * this.requiredComponents[0].component.values.size;
-                const cardPfpX = this.requiredComponents[0].component.subComponents[0].values.positionX - pfpRadius;
-                const cardPfpY = this.requiredComponents[0].component.subComponents[0].values.positionY - pfpRadius;
+                const pfpRadius = 130 * pfpComponent.values.size;
+                const cardPfpX = pfpComponent.subComponents[0].values.positionX - pfpRadius;
+                const cardPfpY = pfpComponent.subComponents[0].values.positionY - pfpRadius;
 
                 positionX = pfpRadius + cardPfpX;
                 positionY = pfpRadius + cardPfpY;
@@ -77,7 +79,7 @@ export class XpBarComponent extends Component {
 
                 let filledBarX = positionX;
                 let filledBarY = positionY;
-    
+
                 switch (this.values.barAlign) {
                     case "center": {
                         filledBarX += (barWidth / 2) - (barWidth * filled) / 2;
@@ -86,12 +88,12 @@ export class XpBarComponent extends Component {
                         filledBarX += (barWidth) - (barWidth * filled);
                     } break;
                 }
-    
+
                 ctx.fillStyle = this.values.barColor;
                 ctx.save();
                 roundRect(ctx, positionX, positionY, barWidth, barHeight, barHeight * round);
                 ctx.restore();
-    
+
                 ctx.fillStyle = `hsla(${blend(startHsl.h, endHsl.h, 1 - filled) * 360}, ${blend(startHsl.s, endHsl.s, 1 - filled) * 100}%, ${blend(startHsl.l, endHsl.l, 1 - filled) * 100}%, 1)`;
                 ctx.save();
                 roundRect(ctx, filledBarX, filledBarY, barWidth * filled, barHeight, barHeight * round, "clip");

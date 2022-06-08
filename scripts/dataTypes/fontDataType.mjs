@@ -8,4 +8,8 @@ export class FontDataType extends DropDownDataType {
     get value() {
         return super.value.replaceAll("_", " ");
     }
+
+    set value(val) {
+        super.value = val.replaceAll(" ", "_");
+    }
 }

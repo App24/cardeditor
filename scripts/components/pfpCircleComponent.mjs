@@ -13,12 +13,14 @@ export class PfpCircleComponent extends Component {
     }
 
     draw(ctx) {
+        const pfpComponent = this.requiredComponents[0].component;
+
         const size = parseInt(this.values.width);
         const color = this.values.color;
 
-        const pfpRadius = 130 * this.requiredComponents[0].component.values.size;
-        const cardPfpX = this.requiredComponents[0].component.subComponents[0].values.positionX - pfpRadius;
-        const cardPfpY = this.requiredComponents[0].component.subComponents[0].values.positionY - pfpRadius;
+        const pfpRadius = 130 * pfpComponent.values.size;
+        const cardPfpX = pfpComponent.subComponents[0].values.positionX - pfpRadius;
+        const cardPfpY = pfpComponent.subComponents[0].values.positionY - pfpRadius;
 
         ctx.save();
         ctx.beginPath();
