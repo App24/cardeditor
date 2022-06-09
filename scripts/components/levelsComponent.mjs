@@ -33,7 +33,7 @@ export class LevelsComponent extends Component {
         const fontSize = 50 * textSize;
 
         const x = parseInt(positionX);
-        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline);
+        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline, font);
 
         const levelsText = `Level: ${text}`;
 

@@ -56,7 +56,7 @@ export class NameComponent extends Component {
         const font = this.subComponents[1].values.textFont;
         
         const x = parseInt(positionX);
-        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline);
+        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline, font);
 
         ctx.textBaseline = textBaseline;
         ctx.fillStyle = matchRole ? "white" : textColor;

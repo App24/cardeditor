@@ -99,7 +99,7 @@ export class XpComponent extends Component {
 
         const xpFontSize = 33.33333333333333 * textSize;
 
-        y += getPositionDiff(xpFontSize, textBaseline);
+        y += getPositionDiff(xpFontSize, textBaseline, font);
 
         ctx.font = `${xpFontSize}px ${font}`;
         ctx.fillStyle = textColor;

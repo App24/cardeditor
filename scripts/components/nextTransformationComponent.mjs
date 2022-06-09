@@ -34,7 +34,7 @@ export class NextTransformationComponent extends Component {
         const fontSize = fitTextOnCanvas(ctx, currentRankText, CARD_WIDTH);
 
         const x = parseInt(positionX);
-        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline);
+        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline, font);
 
         ctx.font = `${fontSize}px ${font}`;
         ctx.textBaseline = textBaseline;

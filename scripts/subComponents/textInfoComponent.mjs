@@ -29,7 +29,14 @@ export class TextInfoComponent extends SubComponent {
             new FontDataType("Font", "textFont", {
                 defaultValue: "Comic Sans MS",
                 values: [
-                    { value: "Comic Sans MS" }
+                    { value: "Comic Sans MS" },
+                    { value: "Helvetica" },
+                    // { value: "Bodoni MT" },
+                    { value: "Garamond" },
+                    { value: "Georgia" },
+                    { value: "Courier New" },
+                    // { value: "Brush Script MT" },
+                    // { value: "Papyrus" },
                 ]
             }),
             new DropDownDataType("Text Alignment", `textAlign`, {

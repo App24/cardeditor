@@ -34,7 +34,7 @@ export class RankComponent extends Component {
         const lbPositionText = `Rank: #${text}`;
 
         const x = parseInt(positionX);
-        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline);
+        const y = parseInt(positionY) + getPositionDiff(fontSize, textBaseline, font);
 
         ctx.textBaseline = textBaseline;
         ctx.fillStyle = textColor;
