@@ -1,13 +1,14 @@
 import { Component } from "../component.mjs";
 import { CheckboxDataType } from "../dataTypes/checkboxDataType.mjs";
 import { PositionComponent } from "../subComponents/positionComponent.mjs";
+import { ScaleComponent } from "../subComponents/scaleComponent.mjs";
 
 export class RoleIconComponent extends Component {
     constructor() {
         super("Role Icon", "roleIcon");
         this.subComponents = [
             new PositionComponent(0, 0),
-            new PositionComponent(128, 128, "Size", "size")
+            new ScaleComponent()
         ];
         this.dataTypes = [
             new CheckboxDataType("Autosize", "autoSize", true, () => this.toggleSize())
@@ -27,8 +28,8 @@ export class RoleIconComponent extends Component {
     }
 
     draw(ctx) {
-        const sizeX = this.values.autoSize ? 128 : this.subComponents[1].values.sizeX;
-        const sizeY = this.values.autoSize ? 128 : this.subComponents[1].values.sizeY;
+        const sizeX = 128 * (this.values.autoSize ? 1 : this.subComponents[1].values.scaleX);
+        const sizeY = 128 * (this.values.autoSize ? 1 : this.subComponents[1].values.scaleY);
 
         const positionX = this.subComponents[0].values.positionX;
         const positionY = this.subComponents[0].values.positionY;
