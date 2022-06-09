@@ -132,15 +132,15 @@ export class WingsComponent extends Component {
     toggleCustomWings() {
         if (this.values.type == "custom") {
             this.dataTypes[3].show();
-            this.dataTypes[4].hide();
+            // this.dataTypes[4].hide();
             this.dataTypes[5].hide();
-            this.dataTypes[6].hide();
+            // this.dataTypes[6].hide();
             this.dataTypes[7].hide();
         } else {
             this.dataTypes[3].hide();
-            this.dataTypes[4].show();
+            // this.dataTypes[4].show();
             this.dataTypes[5].show();
-            this.dataTypes[6].show();
+            // this.dataTypes[6].show();
             this.dataTypes[7].show();
         }
     }
