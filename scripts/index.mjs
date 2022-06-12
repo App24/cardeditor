@@ -8,6 +8,7 @@ import { PfpComponent } from "./components/pfpComponent.mjs";
 import { RankComponent } from "./components/rankComponent.mjs";
 import { WingsComponent } from "./components/wingsComponent.mjs";
 import { XpBarComponent } from "./components/xpBarComponent.mjs";
+import { LeaderboardComponent } from "./components/leaderboardComponent.mjs";
 import { XpComponent } from "./components/xpComponent.mjs";
 import { Menu } from "./menu.mjs";
 import { MAX_LAYERS, CARD_WIDTH, CARD_HEIGHT, DEFAULT_CODE } from "./constants.mjs"
@@ -30,6 +31,7 @@ class Application {
                     settingsMenu.addContent(this.disabledComponentsMenu);
                     this.menus.push(this.disabledComponentsMenu);
                 }
+
                 {
                     for (let i = 0; i < MAX_LAYERS; i++) {
                         const layerMenu = new Menu(`Layer ${i + 1}`);
@@ -38,6 +40,20 @@ class Application {
                         this.menus.push(layerMenu);
                     }
                 }
+
+                {
+                    this.leaderboardComponent = new LeaderboardComponent();
+                    this.leaderboardComponent.id = this.currentId++;
+                    const componentMenu = new Menu(this.leaderboardComponent.name);
+                    this.leaderboardComponent.dataTypes.forEach(dataType => {
+                        componentMenu.addContent(dataType.createHTML(this.leaderboardComponent.componentId, async () => await this.drawLayerFull(component, componentMenu.parentMenu.menu.dataset.layer)));
+                    });
+                    this.leaderboardComponent.parentElement = componentMenu.menu;
+                    componentMenu.menu.dataset.component = this.leaderboardComponent.componentId;
+                    settingsMenu.addContent(componentMenu);
+                    this.menus.push(componentMenu);
+                }
+
                 {
                     const fieldset = document.createElement("fieldset");
                     const legend = document.createElement("legend");
@@ -81,7 +97,7 @@ class Application {
                         const code = [];
                         this.components.forEach(component => {
                             const layer = this.getLayer(component);
-                            if (layer >= 0 && !component.parentElement.hidden) {
+                            if ((layer >= 0 && !component.parentElement.hidden)) {
                                 component.dataTypes.forEach(dataType => {
                                     const element = dataType.valueElement;
                                     if (element.dataset.nosave == null) {
@@ -90,6 +106,15 @@ class Application {
                                         }
                                     }
                                 });
+                            }
+                        });
+
+                        this.leaderboardComponent.dataTypes.forEach(dataType => {
+                            const element = dataType.valueElement;
+                            if (element.dataset.nosave == null) {
+                                if (!dataType.parentElement.hidden) {
+                                    code.push(`${element.id}=${dataType.value}`);
+                                }
                             }
                         });
 
@@ -223,12 +248,20 @@ class Application {
             const key = valueParts.shift();
             const value = valueParts.join("=");
             if (key.startsWith("cl_")) return;
-            this.components.forEach(component => {
-                component.dataTypes.forEach(dataType => {
+            this.components.some(component => {
+                if (!component.dataTypes.forEach(dataType => {
                     if (dataType.valueElement.id === key) {
                         dataType.value = value;
+                        return true;
                     }
-                });
+                    return false;
+                })) {
+                    this.leaderboardComponent.dataTypes.forEach(dataType => {
+                        if (dataType.valueElement.id === key) {
+                            dataType.value = value;
+                        }
+                    })
+                }
             });
         });
 
@@ -255,6 +288,8 @@ class Application {
         this.components.forEach(component => {
             component.onLoad();
         });
+
+        this.leaderboardComponent.onLoad();
 
         for (let i = 0; i < MAX_LAYERS; i++) {
             this.drawLayer(i);
