@@ -46,7 +46,7 @@ class Application {
                     this.leaderboardComponent.id = this.currentId++;
                     const componentMenu = new Menu(this.leaderboardComponent.name);
                     this.leaderboardComponent.dataTypes.forEach(dataType => {
-                        componentMenu.addContent(dataType.createHTML(this.leaderboardComponent.componentId, async () => await this.drawLayerFull(component, componentMenu.parentMenu.menu.dataset.layer)));
+                        componentMenu.addContent(dataType.createHTML(this.leaderboardComponent.componentId, async () => await this.drawLayerFull(this.leaderboardComponent, componentMenu.parentMenu.menu.dataset.layer)));
                     });
                     this.leaderboardComponent.parentElement = componentMenu.menu;
                     componentMenu.menu.dataset.component = this.leaderboardComponent.componentId;
@@ -231,7 +231,7 @@ class Application {
                 }
             }
 
-            this.loadCode(localStorage.getItem("cardCode") ?? "");
+            this.loadCode(localStorage.getItem("cardCode") ?? DEFAULT_CODE);
 
             this.menus.forEach(menu => {
                 menu.closeMenu();
