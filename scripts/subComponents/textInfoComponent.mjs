@@ -35,6 +35,7 @@ export class TextInfoComponent extends SubComponent {
                     { value: "Garamond" },
                     { value: "Georgia" },
                     { value: "Courier New" },
+                    { value: "Copperplate Gothic Light" },
                     // { value: "Brush Script MT" },
                     // { value: "Papyrus" },
                 ]
