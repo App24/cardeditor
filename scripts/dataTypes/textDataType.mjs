@@ -52,6 +52,14 @@ export class TextDataType extends DataType {
         return document.getElementById(`${this.componentId}_${this.name}_div`);
     }
 
+    get disabled() {
+        return this.valueElement.disabled;
+    }
+
+    set disabled(val) {
+        this.valueElement.disabled = val;
+    }
+
     toggle() {
         if (this.parentElement.hidden) {
             this.show();

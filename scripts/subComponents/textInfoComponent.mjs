@@ -65,7 +65,7 @@ export class TextInfoComponent extends SubComponent {
         this.dataTypes = [...this.dataTypes,
         new ColorDataType("Stroke Color", `strokeColor`, this.defaultStrokeColor),
         new SliderDataType("Stroke Size", `strokeSize`, this.strokeData.default, this.strokeData.min, this.strokeData.max, this.strokeData.step ?? 1),
-        new ButtonDataType("Reset to default", `resetButton`, () => {
+        new ButtonDataType("Reset to default", `textInfo_resetButton`, () => {
             let i = 0;
             this.dataTypes[i++].value = this.defaultText;
             this.dataTypes[i++].value = this.defaultTextAlign;

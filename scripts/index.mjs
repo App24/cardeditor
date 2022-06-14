@@ -48,6 +48,8 @@ class Application {
                     this.leaderboardComponent.dataTypes.forEach(dataType => {
                         componentMenu.addContent(dataType.createHTML(this.leaderboardComponent.componentId, async () => await this.drawLayerFull(this.leaderboardComponent, componentMenu.parentMenu.menu.dataset.layer)));
                     });
+                    componentMenu.label.style.backgroundColor = "rgb(46, 26, 46)";
+                    componentMenu.content.style.backgroundColor = "rgba(71, 51, 71, 0.8)";
                     this.leaderboardComponent.parentElement = componentMenu.menu;
                     componentMenu.menu.dataset.component = this.leaderboardComponent.componentId;
                     settingsMenu.addContent(componentMenu);
@@ -280,6 +282,13 @@ class Application {
                 }
             }
         });
+
+        this.components.forEach(component => {
+            const layer = this.getLayer(component);
+            if (!(component instanceof SubComponent))
+                this.toggleComponent(component, layer < 0);
+            // component.dataTypes.forEach(dataType => dataType.disabled = layer <= -1);
+        });
     }
 
     loadCode(code) {
@@ -391,6 +400,8 @@ class Application {
                                 required.forEach(requiredComponent => {
                                     const requiredComponentMenu = this.menus.find(m => m.menu.dataset.component === requiredComponent.componentId);
                                     if (this.getLayer(requiredComponent) < 0) {
+                                        // requiredComponent.dataTypes.forEach(dataType => dataType.disabled = false);
+                                        this.toggleComponent(requiredComponent, false);
                                         menu.addContent(requiredComponentMenu);
                                     }
                                 });
@@ -411,6 +422,7 @@ class Application {
                                     draggedOver = parentMenu.menu;
                                 }
                             }
+                            this.toggleComponent(component, draggedOver.dataset.layer <= -1);
                             await this.drawLayer(draggedOver.dataset.layer);
                         }
 
@@ -501,6 +513,11 @@ class Application {
             });
         });
         return components;
+    }
+
+    toggleComponent(component, value) {
+        component.dataTypes.forEach(dataType => dataType.disabled = value);
+        component.subComponents.forEach(subComponent => this.toggleComponent(subComponent, value));
     }
 
     async drawLayerFull(component, layer) {

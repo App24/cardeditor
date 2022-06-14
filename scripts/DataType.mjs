@@ -13,6 +13,9 @@ export class DataType {
 
     get valueElement() { }
 
+    get disabled() { }
+    set disabled(val) { }
+
     toggle() { }
     hide() { }
     show() { }

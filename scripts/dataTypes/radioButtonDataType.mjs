@@ -1,6 +1,6 @@
 import { DataType } from "../DataType.mjs";
 
-export class RadialButtonDataType extends DataType {
+export class RadioButtonDataType extends DataType {
     constructor(label, name, defaultValue, values, callbackFn = () => undefined, save = true) {
         super(label, name, defaultValue, callbackFn, save);
         this.values = values;
@@ -72,6 +72,24 @@ export class RadialButtonDataType extends DataType {
             if (element.value == val) {
                 element.checked = true;
             }
+        }
+    }
+
+    get disabled() {
+        const elements = document.querySelectorAll(`[data-${this.componentId}]`);
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+            return element.disabled;
+        }
+        return false;
+    }
+
+    set disabled(val) {
+        // this.valueElement.disabled = val;
+        const elements = document.querySelectorAll(`[data-${this.componentId}]`);
+        for (let i = 0; i < elements.length; i++) {
+            const element = elements[i];
+            element.disabled = val;
         }
     }
 

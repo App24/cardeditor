@@ -36,6 +36,14 @@ export class CheckboxDataType extends DataType {
         return div;
     }
 
+    get disabled() {
+        return this.valueElement.disabled;
+    }
+
+    set disabled(val) {
+        this.valueElement.disabled = val;
+    }
+
     get valueElement() {
         return document.getElementById(`${this.componentId}_${this.name}`);
     }
