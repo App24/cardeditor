@@ -32,7 +32,6 @@ export class ButtonDataType extends DataType {
     }
 
     set disabled(val) {
-        console.log(this.valueElement.id);
         this.valueElement.disabled = val;
     }
 
