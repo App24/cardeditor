@@ -10,7 +10,7 @@ export class XpComponent extends Component {
         super("XP Text", "xp");
         this.subComponents = [
             new PositionComponent(100, 62),
-            new PositionComponent(100, 57, "Offset", "offset"),
+            new PositionComponent(100, 57, "Offset", "offset", true),
             new TextInfoComponent("0/0", "center", "top", "#ffffff", true, "#000000", { default: 0, min: 0, max: 5 })
         ];
         this.subComponents[2].disableTextSave();
@@ -42,8 +42,6 @@ export class XpComponent extends Component {
     }
 
     onLoad() {
-        this.subComponents[1].parentElement.children[1].remove();
-        this.subComponents[1].dataTypes.shift();
         this.togglePosition();
         this.toggleOffset();
     }

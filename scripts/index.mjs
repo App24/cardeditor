@@ -174,6 +174,26 @@ class Application {
 
                     settingsMenu.addContent(input);
                 }
+
+                {
+                    const input = document.createElement("input");
+                    input.type = "button";
+                    input.value = "Clear Card";
+                    input.style.marginLeft = "0.3vw";
+
+                    input.addEventListener("click", () => {
+                        this.loadCode("");
+
+                        this.menus.forEach(menu => {
+                            menu.closeMenu();
+                        });
+
+                        settingsMenu.openMenu();
+                    });
+
+                    settingsMenu.addContent(input);
+                }
+
                 settingsMenu.addContent(document.createElement("br"));
                 {
                     const label = document.createElement("label");
@@ -244,6 +264,14 @@ class Application {
     parseCode(code) {
         if (code === undefined) return;
         const parts = code.split("|");
+
+        this.components.forEach(component => {
+            if (!(component instanceof SubComponent)) {
+                const layerMenu = this.menus.find(m => m.menu.dataset.layer === "-1");
+                const componentMenu = this.menus.find(m => m.menu.dataset.component === component.componentId);
+                layerMenu.addContent(componentMenu);
+            }
+        });
 
         parts.forEach(part => {
             const valueParts = part.split("=");
