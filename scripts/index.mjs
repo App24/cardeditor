@@ -7,6 +7,7 @@ import { PfpCircleComponent } from "./components/pfpCircleComponent.mjs";
 import { PfpComponent } from "./components/pfpComponent.mjs";
 import { RankComponent } from "./components/rankComponent.mjs";
 import { WingsComponent } from "./components/wingsComponent.mjs";
+import { CustomWingsComponent } from "./components/customWingsComponent.mjs";
 import { XpBarComponent } from "./components/xpBarComponent.mjs";
 import { LeaderboardComponent } from "./components/leaderboardComponent.mjs";
 import { XpComponent } from "./components/xpComponent.mjs";
@@ -224,6 +225,7 @@ class Application {
             this.addComponent(new PfpComponent());
             this.addComponent(new PfpCircleComponent());
             this.addComponent(new WingsComponent());
+            this.addComponent(new CustomWingsComponent());
             this.addComponent(new LevelsComponent());
             this.addComponent(new XpComponent());
             this.addComponent(new XpBarComponent());

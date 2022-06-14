@@ -26,11 +26,6 @@ export class WingsComponent extends Component {
                 { name: "Radial Gradient", value: "radialGradient" }]
             }
             ),
-            new DropDownDataType("Wings Type", "type", {
-                defaultValue: "default",
-                values: [{ name: "Default", value: "default" }, { name: "Custom", value: "custom" }]
-            }, () => this.toggleCustomWings()),
-            new FileDataType("Wings Image", "wingsImage"),
             new CheckboxDataType("Auto Resize Primary Wings", "autoSizeWingsA", true, () => this.toggleWingsAScale()),
             new DropDownDataType("Primary Wings Example", "wingsAExample", {
                 defaultValue: "example1",
@@ -54,18 +49,8 @@ export class WingsComponent extends Component {
 
         const wingsImages = [];
 
-        if (this.values.type === "default") {
-            wingsImages.push(await loadImage(`wings/${this.values.wingsAExample}/aisha.png`));
-            wingsImages.push(await loadImage(`wings/${this.values.wingsBExample}/tecna.png`));
-        } else {
-            if (this.values.wingsImage !== undefined) {
-                wingsImages.push(await getImageFromBlob(this.values.wingsImage));
-                wingsImages.push(await getImageFromBlob(this.values.wingsImage));
-            } else {
-                wingsImages.push(undefined);
-                wingsImages.push(undefined);
-            }
-        }
+        wingsImages.push(await loadImage(`wings/${this.values.wingsAExample}/aisha.png`));
+        wingsImages.push(await loadImage(`wings/${this.values.wingsBExample}/tecna.png`));
 
         const pfpX = this.values.followPfp ? pfpComponent.subComponents[0].values.positionX : this.subComponents[0].values.positionX;
         const pfpY = this.values.followPfp ? pfpComponent.subComponents[0].values.positionY : this.subComponents[0].values.positionY;
@@ -102,7 +87,6 @@ export class WingsComponent extends Component {
         this.togglePosition();
         this.toggleWingsAScale();
         this.toggleWingsBScale();
-        this.toggleCustomWings();
     }
 
     togglePosition() {
@@ -126,22 +110,6 @@ export class WingsComponent extends Component {
             this.subComponents[2].hide();
         } else {
             this.subComponents[2].show();
-        }
-    }
-
-    toggleCustomWings() {
-        if (this.values.type == "custom") {
-            this.dataTypes[3].show();
-            // this.dataTypes[4].hide();
-            this.dataTypes[5].hide();
-            // this.dataTypes[6].hide();
-            this.dataTypes[7].hide();
-        } else {
-            this.dataTypes[3].hide();
-            // this.dataTypes[4].show();
-            this.dataTypes[5].show();
-            // this.dataTypes[6].show();
-            this.dataTypes[7].show();
         }
     }
 }
