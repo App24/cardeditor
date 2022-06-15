@@ -36,6 +36,10 @@ export class Menu {
         this.label.addEventListener("click", () => this._toggleMenu());
     }
 
+    setLabelTitle(title) {
+        this.label.title = title;
+    }
+
     isEmpty() {
         return this.content.childElementCount <= 0;
     }

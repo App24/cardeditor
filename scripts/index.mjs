@@ -46,16 +46,11 @@ class Application {
                 {
                     this.leaderboardComponent = new LeaderboardComponent();
                     this.leaderboardComponent.id = this.currentId++;
-                    const componentMenu = new Menu(this.leaderboardComponent.name);
-                    this.leaderboardComponent.dataTypes.forEach(dataType => {
-                        componentMenu.addContent(dataType.createHTML(this.leaderboardComponent.componentId, async () => await this.drawLayerFull(this.leaderboardComponent, componentMenu.parentMenu.menu.dataset.layer)));
-                    });
+
+                    const componentMenu = this.createComponentMenu(this.leaderboardComponent, false);
                     componentMenu.label.style.backgroundColor = "rgb(46, 26, 46)";
                     componentMenu.content.style.backgroundColor = "rgba(71, 51, 71, 0.8)";
-                    this.leaderboardComponent.parentElement = componentMenu.menu;
-                    componentMenu.menu.dataset.component = this.leaderboardComponent.componentId;
                     settingsMenu.addContent(componentMenu);
-                    this.menus.push(componentMenu);
                 }
 
                 {
@@ -355,18 +350,29 @@ class Application {
         localStorage.setItem("cardCode", code);
     }
 
+    createComponentMenu(component, draggable) {
+        const componentMenu = new Menu(component.name, draggable);
+        component.dataTypes.forEach(dataType => {
+            componentMenu.addContent(dataType.createHTML(component.componentId, async () => await this.drawLayerFull(component, componentMenu.parentMenu.menu.dataset.layer)));
+        });
+
+        if (component.description) {
+            componentMenu.setLabelTitle(component.description);
+        }
+
+        component.parentElement = componentMenu.menu;
+        componentMenu.menu.dataset.component = component.componentId;
+        this.menus.push(componentMenu);
+
+        return componentMenu;
+    }
+
     addComponent(component, subComponent = false) {
         component.id = this.currentId++;
 
         if (!subComponent) {
-            const componentMenu = new Menu(component.name, true);
-            component.dataTypes.forEach(dataType => {
-                componentMenu.addContent(dataType.createHTML(component.componentId, async () => await this.drawLayerFull(component, componentMenu.parentMenu.menu.dataset.layer)));
-            });
-            component.parentElement = componentMenu.menu;
-            componentMenu.menu.dataset.component = component.componentId;
+            const componentMenu = this.createComponentMenu(component, true);
             this.disabledComponentsMenu.addContent(componentMenu);
-            this.menus.push(componentMenu);
 
             {
                 const initDragging = (e) => {

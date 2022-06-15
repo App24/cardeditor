@@ -4,7 +4,7 @@ import { RadioButtonDataType } from "../dataTypes/radioButtonDataType.mjs";
 
 export class LeaderboardComponent extends Component {
     constructor() {
-        super("Leaderboard Settings", "lb");
+        super("Leaderboard Settings", "lb", "Settings for the leaderboard card");
         this.dataTypes = [
             new RadioButtonDataType("Background Color", "backgroundColorType", "primaryColor", [
                 { name: "Primary Color", value: "primaryColor" },

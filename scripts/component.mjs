@@ -1,5 +1,5 @@
 export class Component {
-    constructor(name, componentId) {
+    constructor(name, componentId, description) {
         this.subComponents = [];
         this.parentComponent = undefined;
         this.id = 0;
@@ -8,6 +8,7 @@ export class Component {
         this.dataTypes = [];
         this.parentElement = undefined;
         this.requiredComponents = [];
+        this.description = description;
     }
 
     get values() {
