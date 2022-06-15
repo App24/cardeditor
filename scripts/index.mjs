@@ -16,6 +16,7 @@ import { MAX_LAYERS, CARD_WIDTH, CARD_HEIGHT, DEFAULT_CODE } from "./constants.m
 import { asyncForEach } from "./utils.mjs"
 import { SubComponent } from "./subComponent.mjs";
 import { RoleIconComponent } from "./components/roleIconComponent.mjs";
+import { Snackbar } from "./snackbar.mjs";
 
 class Application {
     constructor() {
@@ -97,43 +98,14 @@ class Application {
                     input.value = "Generate Code";
 
                     input.addEventListener("click", () => {
-                        const code = [];
-                        this.components.forEach(component => {
-                            const layer = this.getLayer(component);
-                            if ((layer >= 0 && !component.parentElement.hidden)) {
-                                component.dataTypes.forEach(dataType => {
-                                    const element = dataType.valueElement;
-                                    if (element.dataset.nosave == null) {
-                                        if (!dataType.parentElement.hidden) {
-                                            code.push(`${element.id}=${dataType.value}`);
-                                        }
-                                    }
-                                });
-                            }
-                        });
-
-                        this.leaderboardComponent.dataTypes.forEach(dataType => {
-                            const element = dataType.valueElement;
-                            if (element.dataset.nosave == null) {
-                                if (!dataType.parentElement.hidden) {
-                                    code.push(`${element.id}=${dataType.value}`);
-                                }
-                            }
-                        });
-
-                        this.components.forEach(component => {
-                            const layer = this.getLayer(component);
-                            if (layer >= 0 && !(component instanceof SubComponent)) {
-                                code.push(`cl_${component.componentId}=${layer}`);
-                            }
-                        });
-
-                        const cardCode = code.join("|");
+                        const cardCode = this.getCode();
 
                         localStorage.setItem("cardCode", cardCode);
                         const cardCodeInput = document.getElementById("cardCode");
                         cardCodeInput.value = cardCode;
                         cardCodeInput.select();
+
+                        Snackbar.createSnackbar("Code Generated!");
                     });
 
                     settingsMenu.addContent(input);
@@ -146,13 +118,20 @@ class Application {
 
                     input.addEventListener("click", () => {
                         const cardCodeInput = document.getElementById("cardCode");
-                        this.loadCode(cardCodeInput.value);
+                        const value = cardCodeInput.value;
+                        if (value == "" || value == null) {
+                            Snackbar.createSnackbar("No Code!");
+                            return;
+                        }
+                        this.loadCode(value);
 
                         this.menus.forEach(menu => {
                             menu.closeMenu();
                         });
 
                         settingsMenu.openMenu();
+
+                        Snackbar.createSnackbar("Code Loaded!");
                     });
 
                     settingsMenu.addContent(input);
@@ -171,6 +150,8 @@ class Application {
                         });
 
                         settingsMenu.openMenu();
+
+                        Snackbar.createSnackbar("Loaded Default Code!");
                     });
 
                     settingsMenu.addContent(input);
@@ -179,7 +160,7 @@ class Application {
                 {
                     const input = document.createElement("input");
                     input.type = "button";
-                    input.value = "Clear Card";
+                    input.value = "Clear Code";
                     input.style.marginLeft = "0.3vw";
 
                     input.addEventListener("click", () => {
@@ -190,6 +171,8 @@ class Application {
                         });
 
                         settingsMenu.openMenu();
+
+                        Snackbar.createSnackbar("Code Cleared!");
                     });
 
                     settingsMenu.addContent(input);
@@ -319,6 +302,41 @@ class Application {
                 this.toggleComponent(component, layer < 0);
             // component.dataTypes.forEach(dataType => dataType.disabled = layer <= -1);
         });
+    }
+
+    getCode() {
+        const code = [];
+        this.components.forEach(component => {
+            const layer = this.getLayer(component);
+            if ((layer >= 0 && !component.parentElement.hidden)) {
+                component.dataTypes.forEach(dataType => {
+                    const element = dataType.valueElement;
+                    if (element.dataset.nosave == null) {
+                        if (!dataType.parentElement.hidden) {
+                            code.push(`${element.id}=${dataType.value}`);
+                        }
+                    }
+                });
+            }
+        });
+
+        this.leaderboardComponent.dataTypes.forEach(dataType => {
+            const element = dataType.valueElement;
+            if (element.dataset.nosave == null) {
+                if (!dataType.parentElement.hidden) {
+                    code.push(`${element.id}=${dataType.value}`);
+                }
+            }
+        });
+
+        this.components.forEach(component => {
+            const layer = this.getLayer(component);
+            if (layer >= 0 && !(component instanceof SubComponent)) {
+                code.push(`cl_${component.componentId}=${layer}`);
+            }
+        });
+
+        return code.join("|");
     }
 
     loadCode(code) {
