@@ -253,11 +253,10 @@ class Application {
             }
         });
 
-        parts.forEach(part => {
+        parts.filter(p => !p.startsWith("cl_")).forEach(part => {
             const valueParts = part.split("=");
             const key = valueParts.shift();
             const value = valueParts.join("=");
-            if (key.startsWith("cl_")) return;
             this.components.some(component => {
                 if (!component.dataTypes.forEach(dataType => {
                     if (dataType.valueElement.id === key) {
@@ -275,18 +274,33 @@ class Application {
             });
         });
 
-        parts.forEach(part => {
+        parts.filter(p => p.startsWith("cl_")).sort((a, b) => {
+            const getLayerSubLayer = (val) => {
+                const valueParts = val.split("=");
+                const key = valueParts.shift();
+                const value = valueParts.join("=");
+
+                const parts = value.split(".");
+                return { layer: parseInt(parts[0]), subLayer: (parts.length > 1 ? parseInt(parts[1]) : 0) };
+            };
+
+            const aLayer = getLayerSubLayer(a);
+            const bLayer = getLayerSubLayer(b);
+
+            if (aLayer.layer === bLayer.layer) {
+                return aLayer.subLayer - bLayer.subLayer;
+            }
+            return aLayer.layer - bLayer.subLayer;
+        }).forEach(part => {
             const valueParts = part.split("=");
             const key = valueParts.shift();
-            const value = valueParts.join("=");
-            if (key.startsWith("cl_")) {
-                const component = this.components.find(c => c.componentId === key.substring(3));
-                if (component) {
-                    const componentMenu = this.menus.find(m => m.menu.dataset.component === component.componentId);
-                    const layerMenu = this.menus.find(m => m.menu.dataset.layer === value);
-                    if (layerMenu && componentMenu) {
-                        layerMenu.addContent(componentMenu);
-                    }
+            const value = valueParts.join("=").split(".")[0];
+            const component = this.components.find(c => c.componentId === key.substring(3));
+            if (component) {
+                const componentMenu = this.menus.find(m => m.menu.dataset.component === component.componentId);
+                const layerMenu = this.menus.find(m => m.menu.dataset.layer === value);
+                if (layerMenu && componentMenu) {
+                    layerMenu.addContent(componentMenu);
                 }
             }
         });
@@ -295,7 +309,6 @@ class Application {
             const layer = this.getLayer(component);
             if (!(component instanceof SubComponent))
                 this.toggleComponent(component, layer < 0);
-            // component.dataTypes.forEach(dataType => dataType.disabled = layer <= -1);
         });
     }
 
@@ -327,7 +340,14 @@ class Application {
         this.components.forEach(component => {
             const layer = this.getLayer(component);
             if (layer >= 0 && !(component instanceof SubComponent)) {
-                code.push(`cl_${component.componentId}=${layer}`);
+                const parentElement = component.parentElement.parentElement;
+                const children = parentElement.children;
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    if (child.dataset.component === component.componentId) {
+                        code.push(`cl_${component.componentId}=${layer}.${i}`);
+                    }
+                }
             }
         });
 
