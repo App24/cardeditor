@@ -3,8 +3,7 @@ import { PositionComponent } from "../subComponents/positionComponent.mjs";
 import { ScaleComponent } from "../subComponents/scaleComponent.mjs";
 import { CheckboxDataType } from "../dataTypes/checkboxDataType.mjs"
 import { DropDownDataType } from "../dataTypes/dropdownDataType.mjs";
-import { FileDataType } from "../dataTypes/fileDataType.mjs";
-import { loadImage, drawMaskedImage, getImageFromBlob } from "../utils.mjs";
+import { loadImage, drawMaskedImage } from "../utils.mjs";
 import { TEMPLATES_FOLDER } from "../constants.mjs"
 
 export class WingsComponent extends Component {

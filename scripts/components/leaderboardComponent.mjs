@@ -1,6 +1,7 @@
 import { Component } from "../component.mjs";
 import { ColorDataType } from "../dataTypes/colorDataType.mjs";
 import { RadioButtonDataType } from "../dataTypes/radioButtonDataType.mjs";
+import { DropDownDataType } from "../dataTypes/dropdownDataType.mjs";
 
 export class LeaderboardComponent extends Component {
     constructor() {
@@ -11,7 +12,15 @@ export class LeaderboardComponent extends Component {
                 { name: "Secondary Color", value: "secondaryColor" },
                 { name: "None", value: "none" }
             ], () => this.toggleColor()),
-            new ColorDataType("Background Color", "primaryColor", "#363636")
+            new ColorDataType("Background Color", "primaryColor", "#363636"),
+            new DropDownDataType("Name Type", "nameType", {
+                defaultValue: "tag",
+                values: [
+                    { name: "Tag", value: "tag" },
+                    { name: "Nickname", value: "nickname" },
+                    { name: "Username", value: "username" }
+                ]
+            })
         ];
     }
 
