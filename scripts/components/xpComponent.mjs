@@ -84,9 +84,9 @@ export class XpComponent extends Component {
             ctx.textAlign = levelsComponent.subComponents[1].values.textAlign;
 
             const metrics = ctx.measureText(levelsText);
-            const actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+            const actualHeight = metrics.actualBoundingBoxDescent;
 
-            x = parseInt(levelsComponent.subComponents[0].values.positionX) + (metrics.width / 2.);
+            x = parseInt(levelsComponent.subComponents[0].values.positionX) + ((metrics.actualBoundingBoxRight - metrics.actualBoundingBoxLeft) / 2.);
             y = parseInt(levelsComponent.subComponents[0].values.positionY);
             if (this.values.autoOffset) {
                 y += (actualHeight * 1.4);
