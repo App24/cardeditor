@@ -14,6 +14,7 @@ export class PfpComponent extends Component {
             new TextDataType("Profile Image", "image", "https://cdn.discordapp.com/embed/avatars/0.png", false),
             new SliderDataType("Size", "size", 1, 0.5, 1.5, 0.1)
         ];
+        this.cache = { image: null, avatar: null };
     }
 
     async draw(ctx) {
@@ -27,7 +28,12 @@ export class PfpComponent extends Component {
             image += "png";
         }
 
-        const userAvatar = await loadImage(image);
+        let userAvatar = this.cache.avatar;
+        if (this.cache.image !== image) {
+            userAvatar = await loadImage(image);
+            this.cache.image = image;
+            this.cache.avatar = userAvatar;
+        }
 
         if (userAvatar) {
 
@@ -44,5 +50,29 @@ export class PfpComponent extends Component {
             ctx.drawImage(userAvatar, cardPfpX, cardPfpY, pfpRadius * 2, pfpRadius * 2);
             ctx.restore();
         }
+    }
+
+    getBoundingRect() {
+        const size = this.values.size;
+        const positionX = this.subComponents[0].values.positionX;
+        const positionY = this.subComponents[0].values.positionY;
+
+        const pfpRadius = 130 * size;
+        const cardPfpX = positionX - pfpRadius;
+        const cardPfpY = positionY - pfpRadius;
+
+        return { left: cardPfpX, top: cardPfpY, width: pfpRadius * 2, height: pfpRadius * 2 };
+    }
+
+    get hasPosition() {
+        return true;
+    }
+
+    setPosition(value) {
+        const { x, y, diffX, diffY } = value;
+        const size = this.values.size;
+        const pfpRadius = 130 * size;
+        this.subComponents[0].dataTypes[0].value = x + (pfpRadius - diffX);
+        this.subComponents[0].dataTypes[1].value = y + (pfpRadius - diffY);
     }
 }

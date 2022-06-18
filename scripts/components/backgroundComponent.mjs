@@ -53,4 +53,8 @@ export class BackgroundComponent extends Component {
             roundRect(ctx, 0, 0, CARD_WIDTH, CARD_HEIGHT, CARD_WIDTH * roundness);
         }
     }
+
+    getBoundingRect() {
+        return { left: 0, top: 0, width: CARD_WIDTH, height: CARD_HEIGHT };
+    }
 }

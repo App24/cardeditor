@@ -37,4 +37,24 @@ export class RoleIconComponent extends Component {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(positionX, positionY, sizeX, sizeY);
     }
+
+    getBoundingRect() {
+        const sizeX = 128 * (this.values.autoSize ? 1 : this.subComponents[1].values.scaleX);
+        const sizeY = 128 * (this.values.autoSize ? 1 : this.subComponents[1].values.scaleY);
+
+        const positionX = parseInt(this.subComponents[0].values.positionX);
+        const positionY = parseInt(this.subComponents[0].values.positionY);
+
+        return { left: positionX, top: positionY, width: sizeX, height: sizeY };
+    }
+
+    get hasPosition() {
+        return true;
+    }
+
+    setPosition(value) {
+        const { x, y, diffX, diffY } = value;
+        this.subComponents[0].dataTypes[0].value = x - diffX;
+        this.subComponents[0].dataTypes[1].value = y - diffY;
+    }
 }

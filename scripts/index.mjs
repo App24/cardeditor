@@ -23,6 +23,9 @@ class Application {
         this.currentId = 0;
         this.components = [];
         this.menus = [];
+
+        this.dragComponents();
+
         addEventListener("load", async () => {
             const settingsMenu = new Menu("Settings");
             document.getElementById("settings").appendChild(settingsMenu.menu);
@@ -238,6 +241,88 @@ class Application {
             this.menus.forEach(menu => {
                 menu.closeMenu();
             });
+        });
+    }
+
+    dragComponents() {
+        const getCanvas = (e) => {
+            const elements = document.elementsFromPoint(e.clientX, e.clientY);
+            if (!elements[0].classList.contains("layerCanvas")) return [];
+            return elements.filter(e => e.classList.contains("layerCanvas"));
+        }
+
+        let draggedComponent;
+        let dragCanvas;
+        let diffX;
+        let diffY;
+
+        addEventListener("mousedown", async (e) => {
+            const elements = getCanvas(e);
+
+            const getComponentsAtLayer = (layer) => {
+                return this.components.filter(component => {
+                    if (!(component instanceof SubComponent)) {
+                        return this.getLayer(component) == layer;
+                    }
+                    return false;
+                });
+            };
+
+            await asyncForEach(elements, async (element, i) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const ctx = element.getContext("2d");
+
+                const layer = MAX_LAYERS - i - 1;
+                const componentsAtLayer = getComponentsAtLayer(layer);
+
+                const getClickedComponent = async () => {
+                    let toReturn;
+                    await asyncForEach(componentsAtLayer, async (component) => {
+                        if (!component.hasPosition) return;
+                        const boundingRect = await component.getBoundingRect(ctx);
+                        if (boundingRect) {
+                            if (boundingRect.left < x && boundingRect.top < y && (boundingRect.left + boundingRect.width) > x && (boundingRect.top + boundingRect.height) > y) {
+                                if (true) {
+                                    if (ctx.getImageData(x, y, 1, 1).data[3] != 0) {
+                                        toReturn = component;
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    return toReturn;
+                };
+
+                const clickedComponent = await getClickedComponent();
+                if (clickedComponent) {
+                    draggedComponent = clickedComponent;
+                    dragCanvas = element;
+                    const boundingRect = await draggedComponent.getBoundingRect(ctx);
+                    diffX = x - boundingRect.left;
+                    diffY = y - boundingRect.top;
+                    return true;
+                }
+            });
+        });
+
+        addEventListener("mousemove", async (e) => {
+            if (draggedComponent) {
+                const canvas = dragCanvas;
+                const ctx = canvas.getContext("2d");
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                draggedComponent.setPosition({ x, y, diffX, diffY }, ctx);
+                await this.drawLayerFull(draggedComponent, this.getLayer(draggedComponent));
+            }
+        });
+
+        addEventListener("mouseup", async (e) => {
+            draggedComponent = null;
         });
     }
 
@@ -621,6 +706,13 @@ class Application {
             canvas.height = CARD_HEIGHT;
             const ctx = canvas.getContext("2d");
             await asyncForEach(components, async (component) => {
+                if (component.drawBoundingRect) {
+                    const boundingRect = await component.getBoundingRect(ctx);
+                    if (boundingRect) {
+                        ctx.fillStyle = "blue";
+                        ctx.fillRect(boundingRect.left, boundingRect.top, boundingRect.width, boundingRect.height);
+                    }
+                }
                 await component.draw(ctx);
             });
         }

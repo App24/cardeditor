@@ -30,4 +30,16 @@ export class PfpCircleComponent extends Component {
         ctx.stroke();
         ctx.restore();
     }
+
+    getBoundingRect() {
+        const pfpComponent = this.requiredComponents[0].component;
+
+        const size = parseInt(this.values.width);
+
+        const pfpRadius = 130 * pfpComponent.values.size;
+        const cardPfpX = pfpComponent.subComponents[0].values.positionX - pfpRadius;
+        const cardPfpY = pfpComponent.subComponents[0].values.positionY - pfpRadius;
+
+        return { left: cardPfpX - size * 2, top: cardPfpY - size * 2, width: (pfpRadius + size * 2) * 2, height: (pfpRadius + size * 2) * 2 };
+    }
 }

@@ -9,6 +9,7 @@ export class Component {
         this.parentElement = undefined;
         this.requiredComponents = [];
         this.description = description;
+        this.drawBoundingRect = false;
     }
 
     get values() {
@@ -26,6 +27,8 @@ export class Component {
 
     }
 
+    getBoundingRect(ctx) { }
+
     toggle() {
         if (this.parentElement.hidden) {
             this.show();
@@ -41,4 +44,10 @@ export class Component {
     show() {
         this.parentElement.hidden = false;
     }
+
+    get hasPosition() {
+        return false;
+    }
+
+    setPosition(value) { }
 }
