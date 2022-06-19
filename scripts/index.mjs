@@ -13,7 +13,7 @@ import { LeaderboardComponent } from "./components/leaderboardComponent.mjs";
 import { XpComponent } from "./components/xpComponent.mjs";
 import { Menu } from "./menu.mjs";
 import { MAX_LAYERS, CARD_WIDTH, CARD_HEIGHT, DEFAULT_CODE } from "./constants.mjs"
-import { asyncForEach } from "./utils.mjs"
+import { asyncForEach, createCanvas, drawMaskedImage } from "./utils.mjs"
 import { SubComponent } from "./subComponent.mjs";
 import { RoleIconComponent } from "./components/roleIconComponent.mjs";
 import { Snackbar } from "./snackbar.mjs";
@@ -591,6 +591,16 @@ class Application {
                     }
                 }
 
+                componentMenu.label.addEventListener("mouseover", () => {
+                    component.hover = true;
+                    this.drawLayer(this.getLayer(component));
+                });
+
+                componentMenu.label.addEventListener("mouseout", () => {
+                    component.hover = false;
+                    this.drawLayer(this.getLayer(component));
+                });
+
                 componentMenu.label.addEventListener("mousedown", (e) => {
                     initDragging(e);
                 });
@@ -706,14 +716,37 @@ class Application {
             canvas.height = CARD_HEIGHT;
             const ctx = canvas.getContext("2d");
             await asyncForEach(components, async (component) => {
+                const otherCanvas = createCanvas(CARD_WIDTH, CARD_HEIGHT);
+                const otherCtx = otherCanvas.getContext("2d");
+                const boundingRect = await component.getBoundingRect(ctx);
                 if (component.drawBoundingRect) {
-                    const boundingRect = await component.getBoundingRect(ctx);
                     if (boundingRect) {
-                        ctx.fillStyle = "blue";
-                        ctx.fillRect(boundingRect.left, boundingRect.top, boundingRect.width, boundingRect.height);
+                        otherCtx.fillStyle = "blue";
+                        otherCtx.fillRect(boundingRect.left, boundingRect.top, boundingRect.width, boundingRect.height);
                     }
                 }
-                await component.draw(ctx);
+                await component.draw(otherCtx);
+                if (component.hover) {
+                    {
+                        const _canvas = createCanvas(CARD_WIDTH, CARD_HEIGHT);
+                        const _ctx = _canvas.getContext("2d");
+
+                        await component.draw(_ctx);
+
+                        _ctx.globalCompositeOperation = "source-in";
+    
+                        _ctx.fillStyle = "yellow";
+                        _ctx.globalAlpha = 0.5;
+                        _ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+                        _ctx.globalAlpha = 1;
+
+                        otherCtx.drawImage(_canvas, 0, 0);
+
+                        _canvas.remove();
+                    }
+                }
+                ctx.drawImage(otherCanvas, 0, 0);
+                otherCanvas.remove();
             });
         }
     }
