@@ -11,7 +11,7 @@ export class NumberDataType extends DataType {
         const div = document.createElement("div");
 
         div.id = `${this.componentId}_${this.name}_div`;
-        
+
         const input = document.createElement("input");
         input.type = "number";
         input.id = `${this.componentId}_${this.name}`;
@@ -39,7 +39,7 @@ export class NumberDataType extends DataType {
         this.valueElement.disabled = val;
     }
 
-    get valueElement(){
+    get valueElement() {
         return document.getElementById(`${this.componentId}_${this.name}`);
     }
 
@@ -48,10 +48,12 @@ export class NumberDataType extends DataType {
     }
 
     set value(val) {
-        this.valueElement.value = val;
+        if (typeof val === "string")
+            val = parseInt(val);
+        this.valueElement.value = Math.round(val);
     }
 
-    get parentElement(){
+    get parentElement() {
         return document.getElementById(`${this.componentId}_${this.name}_div`);
     }
 

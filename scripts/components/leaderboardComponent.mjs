@@ -10,7 +10,7 @@ export class LeaderboardComponent extends Component {
             new RadioButtonDataType("Background Color", "backgroundColorType", "primaryColor", [
                 { name: "Primary Color", value: "primaryColor" },
                 { name: "Secondary Color", value: "secondaryColor" },
-                { name: "None", value: "none" }
+                { name: "Custom", value: "custom" }
             ], () => this.toggleColor()),
             new ColorDataType("Background Color", "primaryColor", "#363636"),
             new DropDownDataType("Name Type", "nameType", {
@@ -29,7 +29,7 @@ export class LeaderboardComponent extends Component {
     }
 
     toggleColor() {
-        if (this.values.backgroundColorType != "none") {
+        if (this.values.backgroundColorType != "custom") {
             this.dataTypes[1].hide();
         } else {
             this.dataTypes[1].show();

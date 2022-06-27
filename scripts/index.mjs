@@ -247,19 +247,23 @@ class Application {
     dragComponents() {
         const getCanvas = (e) => {
             const elements = document.elementsFromPoint(e.clientX, e.clientY);
-            if (!elements[0].classList.contains("layerCanvas")) return [];
+            if (elements.length <= 0 || !elements[0].classList.contains("layerCanvas")) return [];
             return elements.filter(e => e.classList.contains("layerCanvas"));
         }
 
-        let draggedComponent;
+        let draggedComponent, hoveredComponent;
         let dragCanvas;
         let diffX;
         let diffY;
 
-        addEventListener("mousedown", async (e) => {
-            const elements = getCanvas(e);
+        const getHoveredComponent = async (e, canvas, layer) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-            const getComponentsAtLayer = (layer) => {
+            const ctx = canvas.getContext("2d");
+
+            const getComponentsAtLayer = () => {
                 return this.components.filter(component => {
                     if (!(component instanceof SubComponent)) {
                         return this.getLayer(component) == layer;
@@ -267,6 +271,28 @@ class Application {
                     return false;
                 });
             };
+
+            const componentsAtLayer = getComponentsAtLayer();
+            let toReturn;
+            await asyncForEach(componentsAtLayer, async (component) => {
+                if (!component.hasPosition) return;
+                const boundingRect = await component.getBoundingRect(ctx);
+                if (boundingRect) {
+                    if (boundingRect.left < x && boundingRect.top < y && (boundingRect.left + boundingRect.width) > x && (boundingRect.top + boundingRect.height) > y) {
+                        if (true) {
+                            if (ctx.getImageData(x, y, 1, 1).data[3] != 0) {
+                                toReturn = component;
+                                return true;
+                            }
+                        }
+                    }
+                }
+            });
+            return toReturn;
+        }
+
+        const startDragging = async (e) => {
+            const elements = getCanvas(e);
 
             await asyncForEach(elements, async (element, i) => {
                 const rect = element.getBoundingClientRect();
@@ -276,28 +302,28 @@ class Application {
                 const ctx = element.getContext("2d");
 
                 const layer = MAX_LAYERS - i - 1;
-                const componentsAtLayer = getComponentsAtLayer(layer);
+                // const componentsAtLayer = getComponentsAtLayer(layer);
 
-                const getClickedComponent = async () => {
-                    let toReturn;
-                    await asyncForEach(componentsAtLayer, async (component) => {
-                        if (!component.hasPosition) return;
-                        const boundingRect = await component.getBoundingRect(ctx);
-                        if (boundingRect) {
-                            if (boundingRect.left < x && boundingRect.top < y && (boundingRect.left + boundingRect.width) > x && (boundingRect.top + boundingRect.height) > y) {
-                                if (true) {
-                                    if (ctx.getImageData(x, y, 1, 1).data[3] != 0) {
-                                        toReturn = component;
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    });
-                    return toReturn;
-                };
+                // const getClickedComponent = async () => {
+                //     let toReturn;
+                //     await asyncForEach(componentsAtLayer, async (component) => {
+                //         if (!component.hasPosition) return;
+                //         const boundingRect = await component.getBoundingRect(ctx);
+                //         if (boundingRect) {
+                //             if (boundingRect.left < x && boundingRect.top < y && (boundingRect.left + boundingRect.width) > x && (boundingRect.top + boundingRect.height) > y) {
+                //                 if (true) {
+                //                     if (ctx.getImageData(x, y, 1, 1).data[3] != 0) {
+                //                         toReturn = component;
+                //                         return true;
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     });
+                //     return toReturn;
+                // };
 
-                const clickedComponent = await getClickedComponent();
+                const clickedComponent = await getHoveredComponent(e, element, layer);
                 if (clickedComponent) {
                     draggedComponent = clickedComponent;
                     dragCanvas = element;
@@ -307,9 +333,9 @@ class Application {
                     return true;
                 }
             });
-        });
+        };
 
-        addEventListener("mousemove", async (e) => {
+        const drag = async (e) => {
             if (draggedComponent) {
                 const canvas = dragCanvas;
                 const ctx = canvas.getContext("2d");
@@ -319,10 +345,89 @@ class Application {
                 draggedComponent.setPosition({ x, y, diffX, diffY }, ctx);
                 await this.drawLayerFull(draggedComponent, this.getLayer(draggedComponent));
             }
+        };
+
+        const endDrag = async (e) => {
+            draggedComponent = null;
+        };
+
+        addEventListener("mousedown", async (e) => {
+            await startDragging(e);
+        });
+
+        addEventListener("touchstart", async (e) => {
+            await startDragging(e.changedTouches[0]);
+        });
+
+        addEventListener("mousemove", async (e) => {
+            await drag(e);
+        });
+
+        // addEventListener("mousemove", async (e) => {
+        //     const elements = getCanvas(e);
+
+        //     let oldLayer = -1;
+        //     let oldComponent;
+        //     if (hoveredComponent) {
+        //         hoveredComponent.hover = false;
+        //         oldComponent = hoveredComponent;
+        //         oldLayer = this.getLayer(hoveredComponent);
+        //     }
+        //     const result = await asyncForEach(elements, async (element, i) => {
+        //         const layer = MAX_LAYERS - i - 1;
+        //         // const componentsAtLayer = getComponentsAtLayer(layer);
+
+        //         // const getClickedComponent = async () => {
+        //         //     let toReturn;
+        //         //     await asyncForEach(componentsAtLayer, async (component) => {
+        //         //         if (!component.hasPosition) return;
+        //         //         const boundingRect = await component.getBoundingRect(ctx);
+        //         //         if (boundingRect) {
+        //         //             if (boundingRect.left < x && boundingRect.top < y && (boundingRect.left + boundingRect.width) > x && (boundingRect.top + boundingRect.height) > y) {
+        //         //                 if (true) {
+        //         //                     if (ctx.getImageData(x, y, 1, 1).data[3] != 0) {
+        //         //                         toReturn = component;
+        //         //                         return true;
+        //         //                     }
+        //         //                 }
+        //         //             }
+        //         //         }
+        //         //     });
+        //         //     return toReturn;
+        //         // };
+
+        //         const hoverComponent = await getHoveredComponent(e, element, layer);
+        //         if (hoverComponent) {
+        //             hoveredComponent = hoverComponent;
+        //             // dragCanvas = element;
+        //             // const boundingRect = await draggedComponent.getBoundingRect(ctx);
+        //             // diffX = x - boundingRect.left;
+        //             // diffY = y - boundingRect.top;
+        //             return true;
+        //         }
+        //     });
+        //     if (!result) {
+        //         hoveredComponent = null;
+        //     }
+        //     if (hoveredComponent && oldLayer !== this.getLayer(hoveredComponent)) {
+        //         hoveredComponent.hover = true;
+        //         await this.drawLayer(this.getLayer(hoveredComponent));
+        //     }
+        //     if ((!hoveredComponent && oldLayer >= 0) || (hoveredComponent && this.getLayer(hoveredComponent) !== oldLayer)) {
+        //         await this.drawLayer(oldLayer);
+        //     }
+        // });
+
+        addEventListener("touchmove", async (e) => {
+            await drag(e.changedTouches[0]);
         });
 
         addEventListener("mouseup", async (e) => {
-            draggedComponent = null;
+            await endDrag(e);
+        });
+
+        addEventListener("touchend", async (e) => {
+            await endDrag(e.changedTouches[0]);
         });
     }
 
@@ -734,7 +839,7 @@ class Application {
                         await component.draw(_ctx);
 
                         _ctx.globalCompositeOperation = "source-in";
-    
+
                         _ctx.fillStyle = "yellow";
                         _ctx.globalAlpha = 0.5;
                         _ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);

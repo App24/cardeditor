@@ -5,6 +5,7 @@ import { CheckboxDataType } from "../dataTypes/checkboxDataType.mjs"
 import { DropDownDataType } from "../dataTypes/dropdownDataType.mjs";
 import { loadImage, drawMaskedImage } from "../utils.mjs";
 import { TEMPLATES_FOLDER } from "../constants.mjs"
+import { CardTemplateDataType } from "../dataTypes/cardTemplateDataType.mjs";
 
 export class WingsComponent extends Component {
     constructor() {
@@ -16,15 +17,7 @@ export class WingsComponent extends Component {
         ];
         this.dataTypes = [
             new CheckboxDataType("Follow PFP Image", "followPfp", true, () => this.togglePosition()),
-            new DropDownDataType("Wings Template", "template", {
-                defaultValue: "normal",
-                values: [{ name: "Normal", value: "normal" },
-                { name: "Split", value: "split" },
-                { name: "Gradient", value: "gradient" },
-                { name: "Central Gradient", value: "centralGradient" },
-                { name: "Radial Gradient", value: "radialGradient" }]
-            }
-            ),
+            new CardTemplateDataType("Wings Template", "template"),
             new CheckboxDataType("Auto Resize Primary Wings", "autoSizeWingsA", true, () => this.toggleWingsAScale()),
             new DropDownDataType("Primary Wings Example", "wingsAExample", {
                 defaultValue: "example1",
