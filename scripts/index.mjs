@@ -6,6 +6,7 @@ import { NextTransformationComponent } from "./components/nextTransformationComp
 import { PfpCircleComponent } from "./components/pfpCircleComponent.mjs";
 import { PfpComponent } from "./components/pfpComponent.mjs";
 import { RankComponent } from "./components/rankComponent.mjs";
+import { WeeklyRankComponent } from "./components/weeklyRankComponent.mjs";
 import { WingsComponent } from "./components/wingsComponent.mjs";
 import { CustomWingsComponent } from "./components/customWingsComponent.mjs";
 import { XpBarComponent } from "./components/xpBarComponent.mjs";
@@ -211,6 +212,7 @@ class Application {
             this.addComponent(new XpComponent());
             this.addComponent(new XpBarComponent());
             this.addComponent(new RankComponent());
+            this.addComponent(new WeeklyRankComponent());
             this.addComponent(new CurrentTransformationComponent());
             this.addComponent(new NextTransformationComponent());
             this.addComponent(new RoleIconComponent());

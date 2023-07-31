@@ -4,9 +4,9 @@ import { TextInfoComponent } from "../subComponents/textInfoComponent.mjs";
 import { CANVAS_FONT } from "../constants.mjs"
 import { getPositionDiff } from "../utils.mjs";
 
-export class RankComponent extends TextComponent {
+export class WeeklyRankComponent extends TextComponent {
     constructor() {
-        super("Leaderboard Text", "rank", 50, {
+        super("Weekly Leaderboard Text", "weekrank", 50, {
             defaultX: 1190, defaultY: 5,
             defaultText: "0", defaultTextAlign: "right", defaultTextBaseline: "top",
             defaultTextColor: "#ffffff", hasTextSize: true,
@@ -25,7 +25,7 @@ export class RankComponent extends TextComponent {
     }
 
     customDraw(ctx, data) {
-        data.text = `Rank: #${data.text}`;
+        data.text = `Week Rank: #${data.text}`;
     }
 
     // async draw(ctx) {
