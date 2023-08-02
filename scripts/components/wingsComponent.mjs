@@ -46,22 +46,17 @@ export class WingsComponent extends Component {
         const pfpX = this.values.followPfp ? pfpComponent.subComponents[0].values.positionX : this.subComponents[0].values.positionX;
         const pfpY = this.values.followPfp ? pfpComponent.subComponents[0].values.positionY : this.subComponents[0].values.positionY;
 
-        const drawWings = (wingsImage, templateImage, autoSize, scaleX, scaleY, globalCompositeOperation) => {
+        const drawWings = (wingsImage, autoSize, scaleX, scaleY) => {
             const wingsWidth = (wingsImage.width * (autoSize ? pfpComponent.values.size : scaleX));
             const wingsHeight = (wingsImage.height * (autoSize ? pfpComponent.values.size : scaleY));
 
             const wingsX = pfpX - wingsWidth / 2.;
             const wingsY = pfpY - wingsHeight / 2.;
 
-            if (!templateImage) {
-                ctx.drawImage(wingsImage, wingsX, wingsY, wingsWidth, wingsHeight);
-            }
-            else {
-                ctx.drawImage(drawMaskedImage(templateImage, wingsImage, globalCompositeOperation), wingsX, wingsY, wingsWidth, wingsHeight);
-            }
+            ctx.drawImage(wingsImage, wingsX, wingsY, wingsWidth, wingsHeight);
         };
 
-        drawWings(wingsImages[0], null, this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY, "source-in");
+        drawWings(wingsImages[0], this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY);
     }
 
     onLoad() {
