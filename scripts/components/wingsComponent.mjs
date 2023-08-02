@@ -12,25 +12,18 @@ export class WingsComponent extends Component {
         super("Wings", "wings");
         this.subComponents = [
             new PositionComponent(600, 260),
-            new ScaleComponent("Primary Wings Scale", "wingsAScale"),
-            new ScaleComponent("Secondary Wings Scale", "wingsBScale")
+            new ScaleComponent("Wings Scale", "wingsAScale"),
         ];
         this.dataTypes = [
             new CheckboxDataType("Follow PFP Image", "followPfp", true, () => this.togglePosition()),
-            new CardTemplateDataType("Wings Template", "template"),
-            new CheckboxDataType("Auto Resize Primary Wings", "autoSizeWingsA", true, () => this.toggleWingsAScale()),
-            new DropDownDataType("Primary Wings Example", "wingsAExample", {
+            new CheckboxDataType("Auto Resize Wings", "autoSizeWingsA", true, () => this.toggleWingsAScale()),
+            new DropDownDataType("Wings Example", "wingsAExample", {
                 defaultValue: "example1",
                 values: [{ name: "Example 1", value: "example1" }, { name: "Example 2", value: "example2" }]
             }, null, false),
-            new CheckboxDataType("Auto Resize Secondary Wings", "autoSizeWingsB", true, () => this.toggleWingsBScale()),
-            new DropDownDataType("Seconday Wings Example", "wingsBExample", {
-                defaultValue: "example1",
-                values: [{ name: "Example 1", value: "example1" }, { name: "Example 2", value: "example2" }]
-            }, null, false)
         ];
         this.requiredComponents = [{ id: "pfp", validation: () => this.values.followPfp }];
-        this.cache = [{ example: null, wings: null }, { example: null, wings: null }, { image: null, template: null }];
+        this.cache = [{ example: null, wings: null }];
     }
 
     async getCachedWings() {
@@ -40,26 +33,13 @@ export class WingsComponent extends Component {
             this.cache[0].example = this.values.wingsAExample;
             this.cache[0].wings = await loadImage(`wings/${this.values.wingsAExample}/aisha.png`);
         }
-        if (this.cache[1].example !== this.values.wingsBExample) {
-            this.cache[1].example = this.values.wingsBExample;
-            this.cache[1].wings = await loadImage(`wings/${this.values.wingsBExample}/aisha.png`);
-        }
         wingsImages.push(this.cache[0].wings);
-        wingsImages.push(this.cache[1].wings);
 
         return wingsImages;
     }
 
     async draw(ctx) {
         const pfpComponent = this.requiredComponents[0].component;
-
-        const wingsTemplatePath = `${TEMPLATES_FOLDER}/${this.values.template}.png`;
-
-        if (this.cache[2].template !== this.values.template) {
-            this.cache[2].template = this.values.template;
-            this.cache[2].image = await loadImage(wingsTemplatePath);
-        }
-        const wingsTemplateImage = this.cache[2].image;
 
         const wingsImages = await this.getCachedWings();
 
@@ -81,23 +61,12 @@ export class WingsComponent extends Component {
             }
         };
 
-        if (wingsImages.length >= 2) {
-            if (wingsImages[0]) {
-                drawWings(wingsImages[0], wingsTemplateImage, this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY, "source-in");
-            }
-
-            if (wingsImages[1]) {
-                drawWings(wingsImages[1], wingsTemplateImage, this.values.autoSizeWingsB, this.subComponents[2].values.wingsBScaleX, this.subComponents[2].values.wingsBScaleY, "source-out");
-            }
-        } else if (wingsImages[0]) {
-            drawWings(wingsImages[0], null, this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY, "source-in");
-        }
+        drawWings(wingsImages[0], null, this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY, "source-in");
     }
 
     onLoad() {
         this.togglePosition();
         this.toggleWingsAScale();
-        this.toggleWingsBScale();
     }
 
     togglePosition() {
@@ -113,14 +82,6 @@ export class WingsComponent extends Component {
             this.subComponents[1].hide();
         } else {
             this.subComponents[1].show();
-        }
-    }
-
-    toggleWingsBScale() {
-        if (this.values.autoSizeWingsB) {
-            this.subComponents[2].hide();
-        } else {
-            this.subComponents[2].show();
         }
     }
 
@@ -143,30 +104,14 @@ export class WingsComponent extends Component {
         }
 
         const firstWing = getWingSize(wingsImages[0], this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY);
-        const secondWing = getWingSize(wingsImages[1], this.values.autoSizeWingsB, this.subComponents[2].values.wingsBScaleX, this.subComponents[2].values.wingsBScaleY);
 
         const getPosition = () => {
-            switch (this.values.template) {
-                case "normal": {
-                } break;
-                default: {
-                    firstWing.top = Math.min(firstWing.top, secondWing.top);
-                } break;
-            }
             return { left: firstWing.left, top: firstWing.top };
         };
 
         const getSize = () => {
 
-            switch (this.values.template) {
-                case "normal": {
-                    firstWing.width *= 2;
-                } break;
-                default: {
-                    firstWing.height = Math.max(firstWing.height, secondWing.height);
-                    firstWing.width += secondWing.width;
-                } break;
-            }
+            firstWing.width *= 2;
             return { width: firstWing.width, height: firstWing.height };
         }
 
@@ -198,15 +143,6 @@ export class WingsComponent extends Component {
         }
 
         const firstWing = getWingSize(wingsImages[0], this.values.autoSizeWingsA, this.subComponents[1].values.wingsAScaleX, this.subComponents[1].values.wingsAScaleY);
-        const secondWing = getWingSize(wingsImages[1], this.values.autoSizeWingsB, this.subComponents[2].values.wingsBScaleX, this.subComponents[2].values.wingsBScaleY);
-
-        switch (this.values.template) {
-            case "normal": {
-            } break;
-            default: {
-                firstWing.height = Math.max(firstWing.height, secondWing.height);
-            } break;
-        }
 
         const xPos = x + firstWing.width - diffX;
         const yPos = y + firstWing.height / 2 - diffY;
