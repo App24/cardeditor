@@ -2,6 +2,7 @@ import { Component } from "../component.mjs";
 import { ColorDataType } from "../dataTypes/colorDataType.mjs";
 import { RadioButtonDataType } from "../dataTypes/radioButtonDataType.mjs";
 import { DropDownDataType } from "../dataTypes/dropdownDataType.mjs";
+import { CheckboxDataType } from "../dataTypes/checkboxDataType.mjs";
 
 export class LeaderboardComponent extends Component {
     constructor() {
@@ -20,7 +21,8 @@ export class LeaderboardComponent extends Component {
                     { name: "Nickname", value: "nickname" },
                     { name: "Username", value: "username" }
                 ]
-            })
+            }),
+            new CheckboxDataType("Avatar Decoration", "avatarDecoration", true)
         ];
     }
 

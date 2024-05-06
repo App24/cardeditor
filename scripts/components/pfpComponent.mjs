@@ -14,7 +14,8 @@ export class PfpComponent extends Component {
         this.dataTypes = [
             new TextDataType("Profile Image", "image", "https://cdn.discordapp.com/embed/avatars/0.png", false),
             new SliderDataType("Size", "size", 1, 0.5, 1.5, 0.1),
-            new CheckboxDataType("Festive Hats", "festiveHat", true)
+            new CheckboxDataType("Festive Hats", "festiveHat", true),
+            new CheckboxDataType("Avatar Decoration", "avatarDecoration", true)
         ];
         this.cache = { image: null, avatar: null };
     }
