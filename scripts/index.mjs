@@ -56,6 +56,71 @@ class Application {
                     componentMenu.content.style.backgroundColor = "rgba(71, 51, 71, 0.8)";
                     settingsMenu.addContent(componentMenu);
                 }
+                {
+                    const input = document.createElement("input");
+                    input.type = "button";
+                    input.value = "Add Custom Wings";
+
+                    input.addEventListener("click", async() => {
+                        const customWingsComponent = this.components.find(c=>c instanceof CustomWingsComponent);
+                        const backgroundComponent = this.components.find(c=>c instanceof BackgroundComponent);
+
+                        const hasBackground = backgroundComponent.layer >= 0;
+
+                        const customWingsComponentMenu = this.getComponentMenu(customWingsComponent);
+
+                        const layer = hasBackground ? backgroundComponent.layer : 0;
+
+                        const previousLayer = customWingsComponent.layer;
+
+                        const menu = this.menus.find(m => m.menu.dataset.layer == layer);
+                        if (menu) {
+                            menu.addContent(customWingsComponentMenu);
+                            menu.openMenu();
+                            {
+                                const required = this.getRequiredComponents(customWingsComponent);
+                                required.forEach(requiredComponent => {
+                                    const requiredComponentMenu = this.menus.find(m => m.menu.dataset.component === requiredComponent.componentId);
+                                    if (this.getLayer(requiredComponent) < 0) {
+                                        // requiredComponent.dataTypes.forEach(dataType => dataType.disabled = false);
+                                        this.toggleComponent(requiredComponent, false);
+                                        menu.addContent(requiredComponentMenu);
+                                    }
+                                });
+                            }
+                            {
+                                const dependant = this.getDependantComponents(customWingsComponent).filter(comp => this.getLayer(comp) >= 0);
+
+                                if (dependant.length && draggedOver.dataset.layer < 0) {
+                                    const dependantMenu = this.menus.find(m => m.menu.dataset.component === dependant[0].componentId)
+                                    let parentMenu = dependantMenu.parentMenu;
+
+                                    while (parentMenu && parentMenu.menu.dataset.layer == null) {
+                                        parentMenu = parentMenu.parentMenu;
+                                    }
+
+                                    parentMenu.addContent(componentMenu);
+
+                                    draggedOver = parentMenu.menu;
+                                }
+                            }
+                            this.toggleComponent(customWingsComponent, layer <= -1);
+                            await this.drawLayer(layer);
+
+                            {
+                                const otherMenu = this.menus.find(m=>m.menu.dataset.layer == previousLayer);
+                                if (otherMenu && otherMenu.isEmpty()) {
+                                    otherMenu.closeMenu();
+                                }
+                            }
+                        }
+
+
+                        Snackbar.createSnackbar("Added Custom Wings!");
+                    });
+
+                    settingsMenu.addContent(input);
+                }
 
                 {
                     const fieldset = document.createElement("fieldset");
@@ -579,6 +644,10 @@ class Application {
         return componentMenu;
     }
 
+    getComponentMenu(component){
+        return this.menus.find(m=>m.label.innerText === component.name);
+    }
+
     addComponent(component, subComponent = false) {
         component.id = this.currentId++;
 
@@ -816,7 +885,7 @@ class Application {
 
     async drawLayer(layer) {
         if (layer < 0) return;
-        const components = this.components.filter(c => c.parentElement.parentElement.parentElement.dataset.layer == layer).reverse();
+        const components = this.components.filter(c => c.layer == layer).sort((a, b) => a.subLayer - b.subLayer);
         const canvas = document.querySelectorAll(".layerCanvas")[layer];
         if (canvas) {
             canvas.width = CARD_WIDTH;

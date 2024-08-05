@@ -50,4 +50,13 @@ export class Component {
     }
 
     setPosition(value) { }
+    
+    get subLayer(){
+        const parent = this.parentElement;
+        return Array.prototype.indexOf.call(parent.parentElement.children, parent);
+    }
+
+    get layer(){
+        return this.parentElement.parentElement.parentElement.dataset.layer;
+    }
 }
